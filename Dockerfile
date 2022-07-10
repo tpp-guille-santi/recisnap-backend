@@ -4,3 +4,7 @@ COPY $requirements $requirements
 RUN pip install --no-cache-dir --upgrade -r $requirements
 COPY . /app
 WORKDIR /app
+
+EXPOSE 8000
+# Use heroku entrypoint
+CMD ["bash", "local_dev.sh"]
