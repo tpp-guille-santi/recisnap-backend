@@ -39,3 +39,9 @@ class UseCases:
             class_names = [class_name[:-1] for class_name in class_names]
             material = class_names[class_idx]
             return Material(material=material)
+
+    async def get_materials(self) -> list[Material]:
+        async with aiofiles.open(self.model_names_location, mode='r') as f:
+            class_names = await f.readlines()
+            class_names = [class_name[:-1] for class_name in class_names]
+            return [Material(material=class_name) for class_name in class_names]

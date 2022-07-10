@@ -39,3 +39,10 @@ async def predict_material(image: Image = Depends(get_image)):
     material = await usecases.predict_material(image)
 
     return material
+
+
+@router.get('/materials')
+async def get_materials():
+    materials = await usecases.get_materials()
+
+    return materials
