@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        requirements: requirements_dev.txt
     env_file:
       - .env
     volumes:
