@@ -22,14 +22,11 @@ async def health() -> Response:
 
 
 async def get_image(file: UploadFile):
-    # image_extensions = ['ras', 'xwd', 'bmp', 'jpe', 'jpg', 'jpeg', 'xpm', 'ief', 'pbm', 'tif',
-    #                     'gif', 'ppm', 'xbm', 'tiff', 'rgb', 'pgm', 'png', 'pnm']
     try:
         image_bytes = await file.read()
-        image = Image.open(io.BytesIO(image_bytes))
+        image = Image.open(io.BytesIO(image_bytes)).convert('RGB')
         image.verify()
-        image = Image.open(io.BytesIO(image_bytes))
-        return image
+        return Image.open(io.BytesIO(image_bytes)).convert('RGB')
     except Exception:
         raise FileTypeExceptionException()
 
