@@ -3,4 +3,4 @@ glass
 metal
 paper
 plastic
-trash
+waste
