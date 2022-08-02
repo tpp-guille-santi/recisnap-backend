@@ -4,8 +4,7 @@ import aiofiles
 import torch
 from PIL import Image
 from torchvision import transforms
-
-from domain.entities import Material, MyModel
+from tpp_guille_santi_commons.entities import Material, MyModel
 
 LOGGER = logging.getLogger(__name__)
 
