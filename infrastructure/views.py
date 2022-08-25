@@ -3,7 +3,7 @@ import logging
 
 import requests
 from PIL import Image
-from fastapi import APIRouter, Response, UploadFile, Depends
+from fastapi import APIRouter, Response, UploadFile, Depends, status
 
 from domain.usecases import UseCases
 from infrastructure.errors import FileTypeExceptionException
@@ -43,3 +43,10 @@ async def get_materials():
     materials = await usecases.get_materials()
 
     return materials
+
+
+@router.put('/models')
+async def replace_model(file: UploadFile):
+    await usecases.replace_model(file)
+
+    return Response(status_code=status.HTTP_200_OK)
