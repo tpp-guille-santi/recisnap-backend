@@ -3,8 +3,11 @@ import logging
 import aiofiles
 import torch
 from PIL import Image
+from fastapi import UploadFile
 from torchvision import transforms
 from tpp_guille_santi_commons.entities import Material, MyModel
+
+from infrastructure.errors import ModelReplacementException
 
 LOGGER = logging.getLogger(__name__)
 
@@ -41,3 +44,12 @@ class UseCases:
     async def _select_material(self, class_idx) -> Material:
         materials = await self.get_materials()
         return materials[class_idx]
+
+    async def replace_model(self, file: UploadFile) -> None:
+        async with aiofiles.open(self.model_location, 'wb') as out_file:
+            try:
+                content = await file.read()
+                await out_file.write(content)
+            except Exception:
+                raise ModelReplacementException()
+        return
