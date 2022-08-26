@@ -65,6 +65,7 @@ async def create_user(user: UserModel):
 
 @router.get("/users", response_model=list[UserModel])
 async def list_users():
+    LOGGER.info(MONGO_URL)
     users = await db["users"].find().to_list(1000)
     return users
 
