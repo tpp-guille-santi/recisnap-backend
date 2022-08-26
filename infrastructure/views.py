@@ -1,24 +1,28 @@
 import io
 import logging
 
-import requests
+import motor.motor_asyncio
 from PIL import Image
 from fastapi import APIRouter, Response, UploadFile, Depends, status
+from fastapi.encoders import jsonable_encoder
 
+from domain.entities import UserModel, UpdateUserModel
 from domain.usecases import UseCases
-from infrastructure.errors import FileTypeExceptionException
-from infrastructure.settings import MODEL_LOCATION, MODEL_NAMES_LOCATION
+from infrastructure.errors import FileTypeExceptionException, UserNotFoundException
+from infrastructure.settings import MODEL_LOCATION, MODEL_NAMES_LOCATION, MONGO_URL
 
 LOGGER = logging.getLogger(__name__)
 
 router = APIRouter(tags=['test'])
+client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_URL)
+db = client.recisnap
 
 usecases = UseCases(MODEL_LOCATION, MODEL_NAMES_LOCATION)
 
 
 @router.get('/health')
 async def health() -> Response:
-    return Response(status_code=requests.codes.ok, content='OK')
+    return Response(status_code=status.HTTP_200_OK, content='OK')
 
 
 async def get_image(file: UploadFile):
@@ -50,3 +54,45 @@ async def replace_model(file: UploadFile):
     await usecases.replace_model(file)
 
     return Response(status_code=status.HTTP_200_OK)
+
+
+@router.post("/users", response_model=UserModel, status_code=status.HTTP_201_CREATED)
+async def create_user(user: UserModel):
+    new_user = await db["users"].insert_one(jsonable_encoder(user))
+    created_user = await db["users"].find_one({"_id": new_user.inserted_id})
+    return created_user
+
+
+@router.get("/users", response_model=list[UserModel])
+async def list_users():
+    users = await db["users"].find().to_list(1000)
+    return users
+
+
+@router.get("/users/{id}", response_model=UserModel)
+async def show_user(id: str):
+    user = await db["users"].find_one({"_id": id})
+    if not user:
+        raise UserNotFoundException(id)
+    return user
+
+
+@router.put("/users/{id}", response_model=UserModel)
+async def update_user(id: str, user: UpdateUserModel):
+    user = {k: v for k, v in user.dict().items() if v is not None}
+    if len(user) >= 1:
+        update_result = await db["users"].update_one({"_id": id}, {"$set": user})
+        if update_result.modified_count == 1:
+            LOGGER.info(f'Updated user {id}')
+    user = await db["users"].find_one({"_id": id})
+    if not user:
+        raise UserNotFoundException(id)
+    return user
+
+
+@router.delete("/users/{id}")
+async def delete_user(id: str):
+    delete_result = await db["users"].delete_one({"_id": id})
+    if delete_result.deleted_count != 1:
+        raise UserNotFoundException(id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
