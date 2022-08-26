@@ -15,3 +15,14 @@ To run the application:
 To stop the application:
 
 `docker compose -f docker-compose.dev.yml down`
+
+To add env variables to heroku
+
+#### Heroku Deploy
+
+```
+heroku config:set PORT=8000 -a peaceful-refuge-34158
+heroku config:set MONGODB_URL=mongodb+srv://<user>:<password>@cluster0.b3b5klh.mongodb.net/test -a peaceful-refuge-34158
+heroku container:push web -a peaceful-refuge-34158
+heroku container:release web -a peaceful-refuge-34158
+```
