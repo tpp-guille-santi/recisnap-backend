@@ -22,7 +22,7 @@ To add env variables to heroku
 
 ```
 heroku config:set PORT=8000 -a peaceful-refuge-34158
-heroku config:set MONGODB_URL=mongodb+srv://databasemanager:PiOnnLtfdyZrL7h5@cluster0.b3b5klh.mongodb.net/test -a peaceful-refuge-34158
+heroku config:set MONGODB_URL=mongodb+srv://<user>:<password>@cluster0.b3b5klh.mongodb.net/test -a peaceful-refuge-34158
 heroku container:push web -a peaceful-refuge-34158
 heroku container:release web -a peaceful-refuge-34158
 ```
