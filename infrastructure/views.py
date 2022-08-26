@@ -22,6 +22,7 @@ usecases = UseCases(MODEL_LOCATION, MODEL_NAMES_LOCATION)
 
 @router.get('/health')
 async def health() -> Response:
+    LOGGER.info("Here 2")
     return Response(status_code=status.HTTP_200_OK, content='OK')
 
 
@@ -65,7 +66,8 @@ async def create_user(user: UserModel):
 
 @router.get("/users", response_model=list[UserModel])
 async def list_users():
-    LOGGER.info(MONGO_URL)
+    LOGGER.info("Here 1")
+    LOGGER.info(f"MONGO_URL: {MONGO_URL}")
     users = await db["users"].find().to_list(1000)
     return users
 
