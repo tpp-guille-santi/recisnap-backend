@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        requirements: requirements_dev.txt
+        requirements: requirements.txt
     env_file:
       - .env
     volumes:
