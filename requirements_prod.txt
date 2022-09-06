@@ -1,7 +1,7 @@
 -f https://download.pytorch.org/whl/torch_stable.html
 pillow==9.2.0
-torch==1.12.1+cpu
-torchvision==0.13.1+cpu
+torch==1.12.0+cpu
+torchvision==0.13.0+cpu
 pydantic[email]==1.10.2
 fastapi==0.82.0
 uvicorn[standard]==0.18.3
