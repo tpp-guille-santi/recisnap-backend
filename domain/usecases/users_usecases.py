@@ -1,7 +1,11 @@
+import logging
+
 from odmantic import ObjectId, AIOEngine
 
 from domain.entities import User, UserUpdate
 from domain.errors import UserNotFoundException
+
+LOGGER = logging.getLogger(__name__)
 
 
 class UsersUseCases:
