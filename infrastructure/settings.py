@@ -2,8 +2,6 @@ import logging
 import os
 
 LOG_LEVEL = int(os.getenv('LOG_LEVEL', logging.INFO))
-LOCAL_MODEL_LOCATION = os.environ['LOCAL_MODEL_LOCATION']
-REMOTE_MODEL_LOCATION = os.environ['REMOTE_MODEL_LOCATION']
 MONGO_URL = os.environ['MONGO_URL']
 
 DATABASE_NAME = 'recisnap'
