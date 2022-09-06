@@ -1,6 +1,5 @@
 import logging
 
-import httpx
 import torch
 from PIL.Image import Image
 from torchvision.transforms import transforms
@@ -11,7 +10,6 @@ from domain.usecases.materials_usecases import MaterialsUseCases
 from domain.usecases.models_usecases import ModelsUseCases
 
 LOGGER = logging.getLogger(__name__)
-client = httpx.AsyncClient()
 
 
 class UseCases:
@@ -19,6 +17,7 @@ class UseCases:
     async def predict_material(self, image: Image, model_name: str,
                                materials_usecases: MaterialsUseCases,
                                models_usecases: ModelsUseCases) -> Material:
+        LOGGER.info('predict_material')
         image_transforms = transforms.Compose([
             transforms.CenterCrop(224),
             transforms.ToTensor()])

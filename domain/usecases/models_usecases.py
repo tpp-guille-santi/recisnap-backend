@@ -1,9 +1,13 @@
-import aiofiles
+import logging
+
+from aiopath import AsyncPath
 from odmantic import ObjectId, query, AIOEngine
 
 from domain.entities import MLModel, MLModelUpdate
 from domain.errors import ModelNotFoundException, NoModelsFoundException
 from domain.repositories import AbstractFirebaseStorageRepository
+
+LOGGER = logging.getLogger(__name__)
 
 
 class ModelsUseCases:
@@ -51,24 +55,29 @@ class ModelsUseCases:
         return model
 
     async def get_latest_model(self, model_name: str) -> MLModel:
+        LOGGER.info("get_latest_model")
         models = await self.list_models(limit=1, name=model_name)
         if not models:
             raise NoModelsFoundException()
         return models[0]
 
     async def get_model_file_directory(self, model_name: str):
+        LOGGER.info("get_model_file_directory MODEL")
         model = await self.get_latest_model(model_name)
         if ModelsUseCases.model_changed(model):
             await self.update_model_file(model)
         return f'./models/{model.name}.pt'
 
     async def update_model_file(self, model: MLModel):
+        LOGGER.info("update_model_file")
         filename = f'{model.name}.pt'
-        file_bytes = await self.firebase_storage_repository_dependency.get_model_file(filename)
-        async with aiofiles.open(f'./models/{filename}', 'wb') as f:
-            await f.write(file_bytes)
+        content = await self.firebase_storage_repository_dependency.get_content(filename)
+        file = AsyncPath(f'./models/{model.name}.pt')
+        await file.parent.mkdir(exist_ok=True, parents=True)
+        await file.write_bytes(content)
         ModelsUseCases.model_timestamp = model.timestamp
 
     @classmethod
     def model_changed(cls, model: MLModel):
+        LOGGER.info("model_changed")
         return cls.model_timestamp != model.timestamp

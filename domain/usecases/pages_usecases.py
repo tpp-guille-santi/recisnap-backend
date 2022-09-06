@@ -1,8 +1,12 @@
+import logging
+
 from odmantic import ObjectId, AIOEngine
 
 from domain.entities import Page, PageUpdate, PageSearch
 from domain.errors import PageNotFoundException
 from infrastructure.repositories import GeorefRepository
+
+LOGGER = logging.getLogger(__name__)
 
 
 class PagesUseCases:

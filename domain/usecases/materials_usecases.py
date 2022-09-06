@@ -1,7 +1,11 @@
+import logging
+
 from odmantic import ObjectId, AIOEngine
 
 from domain.entities import Material, MaterialUpdate
 from domain.errors import MaterialNotFoundException
+
+LOGGER = logging.getLogger(__name__)
 
 
 class MaterialsUseCases:

@@ -10,7 +10,7 @@ class FirebaseStorageRepository(AbstractFirebaseStorageRepository):
         self.client = httpx.AsyncClient()
         self.firebase_storage_base_url = firebase_storage_base_url
 
-    async def get_model_file(self, filename: str) -> bytes:
+    async def get_content(self, filename: str) -> bytes:
         r = await self.client.get(f'{self.firebase_storage_base_url}/models%2F{filename}?alt=media')
         return r.content
 
