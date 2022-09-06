@@ -1,6 +1,7 @@
+-f https://download.pytorch.org/whl/torch_stable.html
 pillow==9.2.0
-torch==1.12.1
-torchvision==0.13.1
+torch==1.12.1+cpu
+torchvision==0.13.1+cpu
 pydantic[email]==1.10.2
 fastapi==0.82.0
 uvicorn[standard]==0.18.3
@@ -10,4 +11,5 @@ tpp-guille-santi-commons==0.0.3
 motor==3.0.0
 odmantic==0.7.1
 httpx==0.23.0
+
 

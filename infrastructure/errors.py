@@ -11,9 +11,3 @@ class ModelReplacementException(HTTPException):
     def __init__(self):
         self.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         self.detail = 'Could not replace the model'
-
-
-class UserNotFoundException(HTTPException):
-    def __init__(self, id: str):
-        self.status_code = status.HTTP_404_NOT_FOUND
-        self.detail = f'User {id} not found'
