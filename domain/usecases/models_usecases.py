@@ -1,6 +1,6 @@
 import logging
 
-from aiopath import AsyncPath
+from keras.models import load_model
 from odmantic import ObjectId, query, AIOEngine
 
 from domain.entities import MLModel, MLModelUpdate
@@ -11,7 +11,6 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ModelsUseCases:
-    model_timestamp: int | None = None
 
     def __init__(self,
                  engine: AIOEngine,
@@ -61,23 +60,31 @@ class ModelsUseCases:
             raise NoModelsFoundException()
         return models[0]
 
-    async def get_model_file_directory(self, model_name: str):
-        LOGGER.info("get_model_file_directory MODEL")
+    async def get_loaded_model(self, model_name: str):
+        LOGGER.info("get_loaded_model")
         model = await self.get_latest_model(model_name)
-        if ModelsUseCases.model_changed(model):
-            await self.update_model_file(model)
-        return f'./models/{model.name}.pt'
+        # if ModelsUseCases.model_changed(model):
+        #     await self.update_model_file(model)
+        #     ModelsUseCases.model = load_model(f'./models/{model.name}', compile=False)
+        return load_model(f'./models/{model.name}', compile=False)
 
-    async def update_model_file(self, model: MLModel):
-        LOGGER.info("update_model_file")
-        filename = f'{model.name}.pt'
-        content = await self.firebase_storage_repository_dependency.get_content(filename)
-        file = AsyncPath(f'./models/{model.name}.pt')
-        await file.parent.mkdir(exist_ok=True, parents=True)
-        await file.write_bytes(content)
-        ModelsUseCases.model_timestamp = model.timestamp
+    # async def update_model_file(self, model: MLModel):
+    #     LOGGER.info("update_model_file")
+    #     content = await self.firebase_storage_repository_dependency.get_content(model.name)
+    #     file = AsyncPath(f'./models/{model.name}')
+    #     await file.parent.mkdir(exist_ok=True, parents=True)
+    #     await file.write_bytes(content)
+    #     ModelsUseCases.model_name = model.name
+    #     ModelsUseCases.model_timestamp = model.timestamp
 
-    @classmethod
-    def model_changed(cls, model: MLModel):
-        LOGGER.info("model_changed")
-        return cls.model_timestamp != model.timestamp
+    # @classmethod
+    # def model_changed(cls, model: MLModel):
+    #     LOGGER.info("model_changed")
+    #     return cls.model_name != model.name or cls.model_timestamp != model.timestamp
+
+    # async def get_model_file_directory(self, model_name: str):
+    #     LOGGER.info("get_model_file_directory MODEL")
+    #     model = await self.get_latest_model(model_name)
+    #     if ModelsUseCases.model_changed(model):
+    #         await self.update_model_file(model)
+    #     return f'./models/{model.name}'
