@@ -1,11 +1,11 @@
 import httpx
 
 from domain.entities import GeorefLocation
-from domain.repositories import AbstractFirebaseStorageRepository, AbstractGeorefRepository
+from domain.repositories import AbstractFirebaseStorageRepository
+from domain.repositories import AbstractGeorefRepository
 
 
 class FirebaseStorageRepository(AbstractFirebaseStorageRepository):
-
     def __init__(self, firebase_storage_base_url: str):
         self.client = httpx.AsyncClient()
         self.firebase_storage_base_url = firebase_storage_base_url

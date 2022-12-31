@@ -1,15 +1,16 @@
 import logging
 
-from odmantic import ObjectId, AIOEngine
+from odmantic import AIOEngine
+from odmantic import ObjectId
 
-from domain.entities import User, UserUpdate
+from domain.entities import User
+from domain.entities import UserUpdate
 from domain.errors import UserNotFoundException
 
 LOGGER = logging.getLogger(__name__)
 
 
 class UsersUseCases:
-
     def __init__(self, engine: AIOEngine):
         self.engine = engine
 
