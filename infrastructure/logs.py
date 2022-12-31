@@ -12,14 +12,17 @@ def _create_logger_handler() -> logging.Handler:
 
 
 def configure_logging(level):
-    logging.basicConfig(level=level, handlers=[_create_logger_handler()])
+    handler = logging.StreamHandler()
+    handler.setFormatter(TaskFormatter(LOGGER_FORMAT))
+    logging.basicConfig(level=level, force=True, handlers=[handler])
+    uvicorn_logger = logging.getLogger('uvicorn.access')
+    if not uvicorn_logger.handlers:
+        uvicorn_logger.addHandler(handler)
+    else:
+        uvicorn_logger.handlers[0].setFormatter(TaskFormatter(LOGGER_FORMAT))
 
 
 class TaskFormatter(logging.Formatter):
-
-    def __init__(self, fmt):
-        super().__init__(fmt=fmt)
-
     def format(self, record):
         record.__dict__.setdefault('trace_id', trace_id.get())
         return super().format(record)

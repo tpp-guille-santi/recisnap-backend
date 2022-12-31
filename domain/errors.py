@@ -1,4 +1,5 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException
+from fastapi import status
 from odmantic import ObjectId
 
 
@@ -29,4 +30,4 @@ class ModelNotFoundException(HTTPException):
 class NoModelsFoundException(HTTPException):
     def __init__(self):
         self.status_code = status.HTTP_404_NOT_FOUND
-        self.detail = f'There are no models available'
+        self.detail = 'There are no models available'

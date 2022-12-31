@@ -1,8 +1,11 @@
 import logging
 
-from odmantic import ObjectId, AIOEngine
+from odmantic import AIOEngine
+from odmantic import ObjectId
 
-from domain.entities import Page, PageUpdate, PageSearch
+from domain.entities import Page
+from domain.entities import PageSearch
+from domain.entities import PageUpdate
 from domain.errors import PageNotFoundException
 from infrastructure.repositories import GeorefRepository
 
@@ -10,7 +13,6 @@ LOGGER = logging.getLogger(__name__)
 
 
 class PagesUseCases:
-
     def __init__(self, engine: AIOEngine, georef_repository: GeorefRepository):
         self.engine = engine
         self.georef_repository = georef_repository
@@ -29,8 +31,9 @@ class PagesUseCases:
     async def _generate_query_filters(self, search: PageSearch) -> list[bool]:
         query_filters = []
         if search.latitude and search.longitude:
-            georef_location = await self.georef_repository.get_georef_location(search.latitude,
-                                                                               search.longitude)
+            georef_location = await self.georef_repository.get_georef_location(
+                search.latitude, search.longitude
+            )
             query_filters.append(Page.provincia == georef_location.ubicacion.provincia.nombre)
             query_filters.append(Page.municipio == georef_location.ubicacion.municipio.nombre)
             query_filters.append(Page.departamento == georef_location.ubicacion.departamento.nombre)

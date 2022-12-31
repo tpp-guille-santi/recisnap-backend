@@ -1,7 +1,8 @@
 from urllib.parse import quote_plus
 
 from odmantic import Model
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
+from pydantic import EmailStr
 
 
 class User(Model):
@@ -84,21 +85,22 @@ class PageResponse(BaseModel):
     departamento: str | None
 
     @staticmethod
-    def from_entity(page: Page, firebase_storage_base_url: str) -> "PageResponse":
+    def from_entity(page: Page, firebase_storage_base_url: str) -> 'PageResponse':
         return PageResponse(
             id=str(page.id),
             material_name=page.material_name,
             editable=page.editable,
-            url=generate_url(page, firebase_storage_base_url),
+            url=_generate_url(page, firebase_storage_base_url),
             municipio=page.municipio,
             provincia=page.provincia,
             departamento=page.departamento,
         )
 
 
-def generate_url(page: Page, firebase_storage_base_url: str) -> str | None:
+def _generate_url(page: Page, firebase_storage_base_url: str) -> str | None:
     path = quote_plus(
-        f'pages/{str(page.provincia)}/{str(page.municipio)}/{str(page.departamento)}/{str(page.provincia)}-{str(page.municipio)}-{str(page.departamento)}-{page.material_name}.md')
+        f'pages/{str(page.provincia)}/{str(page.municipio)}/{str(page.departamento)}/{str(page.provincia)}-{str(page.municipio)}-{str(page.departamento)}-{page.material_name}.md'
+    )
     return f'{firebase_storage_base_url}/{path}?alt=media'
 
 
