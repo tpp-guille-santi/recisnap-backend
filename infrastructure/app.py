@@ -3,6 +3,7 @@ import uuid
 
 from fastapi import FastAPI
 from fastapi import Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from infrastructure import views
 from infrastructure.context import trace_id
@@ -29,5 +30,18 @@ async def requests_middleware(request: Request, call_next):
     response = await call_next(request)
     return response
 
+
+origins = [
+    '*',
+]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 app.include_router(views.router)
