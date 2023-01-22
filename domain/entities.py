@@ -9,7 +9,7 @@ class User(Model):
     firebase_uid: str
     name: str | None = None
     email: EmailStr | None = None
-    permissions: list[str] | None = None
+    permissions: list[str] | None = []
 
 
 class UserUpdate(BaseModel):
