@@ -4,7 +4,7 @@ from odmantic import ObjectId
 
 
 class UserNotFoundException(HTTPException):
-    def __init__(self, id: ObjectId):
+    def __init__(self, id: str):
         self.status_code = status.HTTP_404_NOT_FOUND
         self.detail = f'User {id} not found'
 

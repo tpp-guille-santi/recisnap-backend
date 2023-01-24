@@ -69,29 +69,29 @@ async def list_users(users_usecases: UsersUseCases = Depends(users_usecases_depe
     return users
 
 
-@router.get('/users/{id}', response_model=User)
+@router.get('/users/{firebase_uid}', response_model=User)
 async def get_user_by_id(
-    id: ObjectId, users_usecases: UsersUseCases = Depends(users_usecases_dependency)
+    firebase_uid: str, users_usecases: UsersUseCases = Depends(users_usecases_dependency)
 ):
-    user = await users_usecases.get_user_by_id(id)
+    user = await users_usecases.get_user_by_firebase_uid(firebase_uid)
     return user
 
 
-@router.patch('/users/{id}', response_model=User)
-async def update_user_by_id(
-    id: ObjectId,
+@router.patch('/users/{firebase_uid}', response_model=User)
+async def update_user_by_firebase_uid(
+    firebase_uid: str,
     patch: UserUpdate,
     users_usecases: UsersUseCases = Depends(users_usecases_dependency),
 ):
-    user = await users_usecases.update_user_by_id(id, patch)
+    user = await users_usecases.update_user_by_firebase_uid(firebase_uid, patch)
     return user
 
 
-@router.delete('/users/{id}', response_model=User)
+@router.delete('/users/{firebase_uid}', response_model=User)
 async def delete_user_by_id(
-    id: ObjectId, users_usecases: UsersUseCases = Depends(users_usecases_dependency)
+    firebase_uid: str, users_usecases: UsersUseCases = Depends(users_usecases_dependency)
 ):
-    user = await users_usecases.delete_user_by_id(id)
+    user = await users_usecases.delete_user_by_firebase_uid(firebase_uid)
     return user
 
 
