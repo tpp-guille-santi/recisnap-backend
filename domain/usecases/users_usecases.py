@@ -1,7 +1,6 @@
 import logging
 
 from odmantic import AIOEngine
-from odmantic import ObjectId
 
 from domain.entities import User
 from domain.entities import UserUpdate
@@ -22,23 +21,23 @@ class UsersUseCases:
         users = await self.engine.find(User)
         return users
 
-    async def get_user_by_id(self, id: ObjectId) -> User:
-        user = await self.engine.find_one(User, User.id == id)
+    async def get_user_by_firebase_uid(self, firebase_uid: str) -> User:
+        user = await self.engine.find_one(User, User.firebase_uid == firebase_uid)
         if not user:
-            raise UserNotFoundException(id)
+            raise UserNotFoundException(firebase_uid)
         return user
 
-    async def update_user_by_id(self, id: ObjectId, patch: UserUpdate) -> User:
-        user = await self.engine.find_one(User, User.id == id)
+    async def update_user_by_firebase_uid(self, firebase_uid: str, patch: UserUpdate) -> User:
+        user = await self.engine.find_one(User, User.firebase_uid == firebase_uid)
         if user is None:
-            raise UserNotFoundException(id)
+            raise UserNotFoundException(firebase_uid)
         user.update(patch)
         await self.engine.save(user)
         return user
 
-    async def delete_user_by_id(self, id: ObjectId) -> User:
-        user = await self.engine.find_one(User, User.id == id)
+    async def delete_user_by_firebase_uid(self, firebase_uid: str) -> User:
+        user = await self.engine.find_one(User, User.firebase_uid == firebase_uid)
         if user is None:
-            raise UserNotFoundException(id)
+            raise UserNotFoundException(firebase_uid)
         await self.engine.delete(user)
         return user
