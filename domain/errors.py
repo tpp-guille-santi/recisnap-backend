@@ -9,10 +9,10 @@ class UserNotFoundException(HTTPException):
         self.detail = f'User {id} not found'
 
 
-class PageNotFoundException(HTTPException):
+class InstructionNotFoundException(HTTPException):
     def __init__(self, id: ObjectId):
         self.status_code = status.HTTP_404_NOT_FOUND
-        self.detail = f'Page {id} not found'
+        self.detail = f'Instruction {id} not found'
 
 
 class MaterialNotFoundException(HTTPException):

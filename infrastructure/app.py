@@ -1,16 +1,24 @@
 import logging
 import uuid
 
+import firebase_admin
 from fastapi import FastAPI
 from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
+from firebase_admin import credentials
 
-from infrastructure import views
 from infrastructure.context import trace_id
 from infrastructure.logs import configure_logging
-from infrastructure.settings import LOG_LEVEL
+from infrastructure.routers import health
+from infrastructure.routers import instructions
+from infrastructure.routers import materials
+from infrastructure.routers import users
+from infrastructure.settings import settings
 
 LOGGER = logging.getLogger(__name__)
+
+cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS_PATH)
+firebase_admin.initialize_app(cred)
 
 app = FastAPI(
     title='Image Predictor Service',
@@ -21,7 +29,7 @@ app = FastAPI(
 
 @app.on_event('startup')
 async def startup_event():
-    configure_logging(LOG_LEVEL)
+    configure_logging(settings.LOG_LEVEL)
 
 
 @app.middleware('http')
@@ -35,7 +43,6 @@ origins = [
     '*',
 ]
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -44,4 +51,7 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-app.include_router(views.router)
+app.include_router(health.router)
+app.include_router(users.router)
+app.include_router(materials.router)
+app.include_router(instructions.router)

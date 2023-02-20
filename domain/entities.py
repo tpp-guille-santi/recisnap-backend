@@ -9,7 +9,7 @@ class User(Model):
     firebase_uid: str
     name: str | None = None
     email: EmailStr | None = None
-    permissions: list[str] | None = []
+    permissions: list[str] | None = ['view_instructions']
 
 
 class UserUpdate(BaseModel):
@@ -46,7 +46,7 @@ class MLModelUpdate(BaseModel):
     timestamp: int | None = None
 
 
-class Page(Model):
+class Instruction(Model):
     material_name: str
     editable: bool
     municipio: str | None
@@ -54,7 +54,7 @@ class Page(Model):
     departamento: str | None
 
 
-class PageSearch(BaseModel):
+class InstructionSearch(BaseModel):
     material_name: str | None = None
     latitude: float | None = None
     longitude: float | None = None
@@ -63,7 +63,7 @@ class PageSearch(BaseModel):
     departamento: str | None = None
 
 
-class PageUpdate(BaseModel):
+class InstructionUpdate(BaseModel):
     material_name: str | None
     editable: bool | None
     municipio: str | None
@@ -71,11 +71,11 @@ class PageUpdate(BaseModel):
     departamento: str | None
 
 
-class BackofficePageRequest(BaseModel):
+class BackofficeInstructionRequest(BaseModel):
     material_name: str
 
 
-class PageResponse(BaseModel):
+class InstructionResponse(BaseModel):
     id: str
     material_name: str
     editable: bool
@@ -85,21 +85,23 @@ class PageResponse(BaseModel):
     departamento: str | None
 
     @staticmethod
-    def from_entity(page: Page, firebase_storage_base_url: str) -> 'PageResponse':
-        return PageResponse(
-            id=str(page.id),
-            material_name=page.material_name,
-            editable=page.editable,
-            url=_generate_url(page, firebase_storage_base_url),
-            municipio=page.municipio,
-            provincia=page.provincia,
-            departamento=page.departamento,
+    def from_entity(
+        instruction: Instruction, firebase_storage_base_url: str
+    ) -> 'InstructionResponse':
+        return InstructionResponse(
+            id=str(instruction.id),
+            material_name=instruction.material_name,
+            editable=instruction.editable,
+            url=_generate_url(instruction, firebase_storage_base_url),
+            municipio=instruction.municipio,
+            provincia=instruction.provincia,
+            departamento=instruction.departamento,
         )
 
 
-def _generate_url(page: Page, firebase_storage_base_url: str) -> str | None:
+def _generate_url(instruction: Instruction, firebase_storage_base_url: str) -> str | None:
     path = quote_plus(
-        f'pages/{str(page.provincia)}/{str(page.municipio)}/{str(page.departamento)}/{str(page.provincia)}-{str(page.municipio)}-{str(page.departamento)}-{page.material_name}.md'
+        f'instructions/{str(instruction.provincia)}/{str(instruction.municipio)}/{str(instruction.departamento)}/{str(instruction.provincia)}-{str(instruction.municipio)}-{str(instruction.departamento)}-{instruction.material_name}.md'
     )
     return f'{firebase_storage_base_url}/{path}?alt=media'
 

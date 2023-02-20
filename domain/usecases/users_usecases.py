@@ -5,13 +5,15 @@ from odmantic import AIOEngine
 from domain.entities import User
 from domain.entities import UserUpdate
 from domain.errors import UserNotFoundException
+from infrastructure.repositories import FirebaseAuthRepository
 
 LOGGER = logging.getLogger(__name__)
 
 
 class UsersUseCases:
-    def __init__(self, engine: AIOEngine):
+    def __init__(self, engine: AIOEngine, firebase_auth_repository: FirebaseAuthRepository):
         self.engine = engine
+        self.firebase_auth_repository = firebase_auth_repository
 
     async def create_user(self, user: User) -> User:
         user = await self.engine.save(user)
@@ -40,4 +42,5 @@ class UsersUseCases:
         if user is None:
             raise UserNotFoundException(firebase_uid)
         await self.engine.delete(user)
+        await self.firebase_auth_repository.delete_user(firebase_uid)
         return user
