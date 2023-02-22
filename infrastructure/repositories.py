@@ -1,6 +1,9 @@
 import httpx
+from asyncer import asyncify
+from firebase_admin import auth
 
 from domain.entities import GeorefLocation
+from domain.repositories import AbstractFirebaseAuthRepository
 from domain.repositories import AbstractFirebaseStorageRepository
 from domain.repositories import AbstractGeorefRepository
 
@@ -13,6 +16,11 @@ class FirebaseStorageRepository(AbstractFirebaseStorageRepository):
     async def get_content(self, filename: str) -> bytes:
         r = await self.client.get(f'{self.firebase_storage_base_url}/models%2F{filename}?alt=media')
         return r.content
+
+
+class FirebaseAuthRepository(AbstractFirebaseAuthRepository):
+    async def delete_user(self, firebase_uid: str) -> None:
+        await asyncify(auth.delete_user)(uid=firebase_uid)
 
 
 class GeorefRepository(AbstractGeorefRepository):

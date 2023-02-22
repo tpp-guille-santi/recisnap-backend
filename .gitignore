@@ -147,3 +147,4 @@ dmypy.json
 cython_debug/
 # Disabled by this moment to avoid disabling folders of dags
 # used only for local testing
+/recisnap-firebase-adminsdk-5byr8-2e33075d3f.json

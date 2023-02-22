@@ -2,30 +2,30 @@ from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine
 
+from domain.usecases.instructions_usecases import InstructionsUseCases
 from domain.usecases.materials_usecases import MaterialsUseCases
-from domain.usecases.pages_usecases import PagesUseCases
 from domain.usecases.users_usecases import UsersUseCases
+from infrastructure.repositories import FirebaseAuthRepository
 from infrastructure.repositories import FirebaseStorageRepository
 from infrastructure.repositories import GeorefRepository
-from infrastructure.settings import DATABASE_NAME
-from infrastructure.settings import FIREBASE_STORAGE_BASE_URL
-from infrastructure.settings import GEOREF_STORAGE_BASE_URL
-from infrastructure.settings import MONGO_URL
+from infrastructure.settings import settings
 
-# from domain.usecases.models_usecases import ModelsUseCases
+
+def firebase_auth_repository_dependency() -> FirebaseAuthRepository:
+    return FirebaseAuthRepository()
 
 
 def firebase_storage_repository_dependency() -> FirebaseStorageRepository:
-    return FirebaseStorageRepository(FIREBASE_STORAGE_BASE_URL)
+    return FirebaseStorageRepository(settings.FIREBASE_STORAGE_BASE_URL)
 
 
 def georef_repository_dependency() -> GeorefRepository:
-    return GeorefRepository(GEOREF_STORAGE_BASE_URL)
+    return GeorefRepository(settings.GEOREF_STORAGE_BASE_URL)
 
 
 def engine_dependency() -> AIOEngine:
-    client = AsyncIOMotorClient(MONGO_URL)
-    return AIOEngine(client=client, database=DATABASE_NAME)
+    client = AsyncIOMotorClient(settings.MONGO_URL)
+    return AIOEngine(client=client, database=settings.DATABASE_NAME)
 
 
 # def usecases_dependency(
@@ -36,15 +36,16 @@ def engine_dependency() -> AIOEngine:
 
 def users_usecases_dependency(
     engine: AIOEngine = Depends(engine_dependency),
+    firebase_auth_repository: FirebaseAuthRepository = Depends(firebase_auth_repository_dependency),
 ) -> UsersUseCases:
-    return UsersUseCases(engine)
+    return UsersUseCases(engine, firebase_auth_repository)
 
 
-def pages_usecases_dependency(
+def instructions_usecases_dependency(
     engine: AIOEngine = Depends(engine_dependency),
     georef_repository: GeorefRepository = Depends(georef_repository_dependency),
-) -> PagesUseCases:
-    return PagesUseCases(engine, georef_repository)
+) -> InstructionsUseCases:
+    return InstructionsUseCases(engine, georef_repository)
 
 
 def materials_usecases_dependency(

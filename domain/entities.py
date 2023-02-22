@@ -1,5 +1,3 @@
-from urllib.parse import quote_plus
-
 from odmantic import Model
 from pydantic import BaseModel
 from pydantic import EmailStr
@@ -9,7 +7,7 @@ class User(Model):
     firebase_uid: str
     name: str | None = None
     email: EmailStr | None = None
-    permissions: list[str] | None = []
+    permissions: list[str] | None = ['view_instructions']
 
 
 class UserUpdate(BaseModel):
@@ -46,62 +44,39 @@ class MLModelUpdate(BaseModel):
     timestamp: int | None = None
 
 
-class Page(Model):
+class GeoJSON(BaseModel):
+    type: str | None = 'Point'
+    coordinates: tuple[float, float] | None
+
+
+class Instruction(Model):
     material_name: str
     editable: bool
-    municipio: str | None
+    lat: float
+    lon: float
+    geo_json: GeoJSON
     provincia: str | None
     departamento: str | None
+    municipio: str | None
 
 
-class PageSearch(BaseModel):
+class InstructionSearch(BaseModel):
     material_name: str | None = None
-    latitude: float | None = None
-    longitude: float | None = None
-    municipio: str | None = None
-    provincia: str | None = None
-    departamento: str | None = None
+    lat: float
+    lon: float
+    max_distance: float
 
 
-class PageUpdate(BaseModel):
+class InstructionCreate(BaseModel):
+    material_name: str
+    editable: bool
+    lat: float
+    lon: float
+
+
+class InstructionUpdate(BaseModel):
     material_name: str | None
     editable: bool | None
-    municipio: str | None
-    provincia: str | None
-    departamento: str | None
-
-
-class BackofficePageRequest(BaseModel):
-    material_name: str
-
-
-class PageResponse(BaseModel):
-    id: str
-    material_name: str
-    editable: bool
-    url: str | None
-    municipio: str | None
-    provincia: str | None
-    departamento: str | None
-
-    @staticmethod
-    def from_entity(page: Page, firebase_storage_base_url: str) -> 'PageResponse':
-        return PageResponse(
-            id=str(page.id),
-            material_name=page.material_name,
-            editable=page.editable,
-            url=_generate_url(page, firebase_storage_base_url),
-            municipio=page.municipio,
-            provincia=page.provincia,
-            departamento=page.departamento,
-        )
-
-
-def _generate_url(page: Page, firebase_storage_base_url: str) -> str | None:
-    path = quote_plus(
-        f'pages/{str(page.provincia)}/{str(page.municipio)}/{str(page.departamento)}/{str(page.provincia)}-{str(page.municipio)}-{str(page.departamento)}-{page.material_name}.md'
-    )
-    return f'{firebase_storage_base_url}/{path}?alt=media'
 
 
 class GeorefLugar(BaseModel):
@@ -115,9 +90,9 @@ class GeorefParametros(BaseModel):
 
 
 class GeorefUbicacion(BaseModel):
-    departamento: GeorefLugar
-    municipio: GeorefLugar
-    provincia: GeorefLugar
+    provincia: GeorefLugar | None
+    departamento: GeorefLugar | None
+    municipio: GeorefLugar | None
     lat: float
     lon: float
 
