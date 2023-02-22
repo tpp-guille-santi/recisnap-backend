@@ -1,5 +1,3 @@
-from urllib.parse import quote_plus
-
 from odmantic import Model
 from pydantic import BaseModel
 from pydantic import EmailStr
@@ -46,64 +44,39 @@ class MLModelUpdate(BaseModel):
     timestamp: int | None = None
 
 
+class GeoJSON(BaseModel):
+    type: str | None = 'Point'
+    coordinates: tuple[float, float] | None
+
+
 class Instruction(Model):
     material_name: str
     editable: bool
-    municipio: str | None
+    lat: float
+    lon: float
+    geo_json: GeoJSON
     provincia: str | None
     departamento: str | None
+    municipio: str | None
 
 
 class InstructionSearch(BaseModel):
     material_name: str | None = None
-    latitude: float | None = None
-    longitude: float | None = None
-    municipio: str | None = None
-    provincia: str | None = None
-    departamento: str | None = None
+    lat: float
+    lon: float
+    max_distance: float
+
+
+class InstructionCreate(BaseModel):
+    material_name: str
+    editable: bool
+    lat: float
+    lon: float
 
 
 class InstructionUpdate(BaseModel):
     material_name: str | None
     editable: bool | None
-    municipio: str | None
-    provincia: str | None
-    departamento: str | None
-
-
-class BackofficeInstructionRequest(BaseModel):
-    material_name: str
-
-
-class InstructionResponse(BaseModel):
-    id: str
-    material_name: str
-    editable: bool
-    url: str | None
-    municipio: str | None
-    provincia: str | None
-    departamento: str | None
-
-    @staticmethod
-    def from_entity(
-        instruction: Instruction, firebase_storage_base_url: str
-    ) -> 'InstructionResponse':
-        return InstructionResponse(
-            id=str(instruction.id),
-            material_name=instruction.material_name,
-            editable=instruction.editable,
-            url=_generate_url(instruction, firebase_storage_base_url),
-            municipio=instruction.municipio,
-            provincia=instruction.provincia,
-            departamento=instruction.departamento,
-        )
-
-
-def _generate_url(instruction: Instruction, firebase_storage_base_url: str) -> str | None:
-    path = quote_plus(
-        f'instructions/{str(instruction.provincia)}/{str(instruction.municipio)}/{str(instruction.departamento)}/{str(instruction.provincia)}-{str(instruction.municipio)}-{str(instruction.departamento)}-{instruction.material_name}.md'
-    )
-    return f'{firebase_storage_base_url}/{path}?alt=media'
 
 
 class GeorefLugar(BaseModel):
@@ -117,9 +90,9 @@ class GeorefParametros(BaseModel):
 
 
 class GeorefUbicacion(BaseModel):
-    departamento: GeorefLugar
-    municipio: GeorefLugar
-    provincia: GeorefLugar
+    provincia: GeorefLugar | None
+    departamento: GeorefLugar | None
+    municipio: GeorefLugar | None
     lat: float
     lon: float
 
