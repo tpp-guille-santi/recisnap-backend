@@ -1,3 +1,4 @@
+import json
 import logging
 import uuid
 
@@ -17,7 +18,7 @@ from infrastructure.settings import settings
 
 LOGGER = logging.getLogger(__name__)
 
-cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS_PATH)
+cred = credentials.Certificate({**json.loads(settings.FIREBASE_CREDENTIALS)})
 firebase_admin.initialize_app(cred)
 
 app = FastAPI(
