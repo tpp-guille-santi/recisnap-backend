@@ -1,4 +1,4 @@
-FROM python:3.10-buster
+FROM python:3.9-buster
 ARG requirements=requirements.txt
 COPY $requirements $requirements
 RUN pip install --no-cache-dir --upgrade -r $requirements

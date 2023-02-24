@@ -1,0 +1,21 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: test-space
+    src: .
+    engine: python3.9
+    primary: true
+    public_routes:
+      - "/*"
+    presets:
+      env:
+        - name: LOG_LEVEL
+          description: Log level
+        - name: MONGO_URL
+          description: Mongo database URL
+        - name: FIREBASE_CREDENTIALS
+          description: Firebase credentials
+        - name: FIREBASE_STORAGE_BASE_URL
+          description: Firebase Storage base URL
+        - name: GEOREF_BASE_URL
+          description: Georef base URL

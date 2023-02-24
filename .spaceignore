@@ -8,9 +8,6 @@
 .venv
 env/
 venv/
-libraries/nubeflow/build/**
-libraries/nubeflow/nubeflow_utils.egg-info/**
-
 
 # PyCharm
 .idea/
@@ -148,4 +145,13 @@ cython_debug/
 # Disabled by this moment to avoid disabling folders of dags
 # used only for local testing
 /recisnap-firebase-adminsdk-5byr8-2e33075d3f.json
-.space
+
+.git/
+.env.example
+.gitignore
+.pre-commit-config.yaml
+docker-compose.dev.yml
+Dockerfile
+heroku.yml
+local_dev.sh
+README.md

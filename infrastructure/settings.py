@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     MONGO_URL: str
     FIREBASE_CREDENTIALS: str
     FIREBASE_STORAGE_BASE_URL: str
-    GEOREF_STORAGE_BASE_URL: str
+    GEOREF_BASE_URL: str
 
 
 settings = Settings()
