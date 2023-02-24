@@ -1,3 +1,5 @@
+from typing import Union
+
 from odmantic import Model
 from pydantic import BaseModel
 from pydantic import EmailStr
@@ -5,15 +7,15 @@ from pydantic import EmailStr
 
 class User(Model):
     firebase_uid: str
-    name: str | None = None
-    email: EmailStr | None = None
-    permissions: list[str] | None = ['view_instructions']
+    name: Union[str, None] = None
+    email: Union[EmailStr, None] = None
+    permissions: Union[list[str], None] = ['view_instructions']
 
 
 class UserUpdate(BaseModel):
-    name: str | None = None
-    email: EmailStr | None = None
-    permissions: list[str] | None = None
+    name: Union[str, None] = None
+    email: Union[EmailStr, None] = None
+    permissions: Union[list[str], None] = None
 
 
 class Material(Model):
@@ -23,15 +25,15 @@ class Material(Model):
 
 
 class MaterialUpdate(BaseModel):
-    name: str | None = None
-    order: int | None = None
-    enabled: bool | None = None
+    name: Union[str, None] = None
+    order: Union[int, None] = None
+    enabled: Union[bool, None] = None
 
 
 class MaterialPrediction(Model):
     image_id: str
     name: str
-    tags: list[str] | None = None
+    tags: Union[list[str], None] = None
 
 
 class MLModel(Model):
@@ -40,13 +42,13 @@ class MLModel(Model):
 
 
 class MLModelUpdate(BaseModel):
-    name: str | None = None
-    timestamp: int | None = None
+    name: Union[str, None] = None
+    timestamp: Union[int, None] = None
 
 
 class GeoJSON(BaseModel):
-    type: str | None = 'Point'
-    coordinates: tuple[float, float] | None
+    type: Union[str, None] = 'Point'
+    coordinates: Union[tuple[float, float], None]
 
 
 class Instruction(Model):
@@ -55,13 +57,13 @@ class Instruction(Model):
     lat: float
     lon: float
     geo_json: GeoJSON
-    provincia: str | None
-    departamento: str | None
-    municipio: str | None
+    provincia: Union[str, None]
+    departamento: Union[str, None]
+    municipio: Union[str, None]
 
 
 class InstructionSearch(BaseModel):
-    material_name: str | None = None
+    material_name: Union[str, None] = None
     lat: float
     lon: float
     max_distance: float
@@ -75,13 +77,13 @@ class InstructionCreate(BaseModel):
 
 
 class InstructionUpdate(BaseModel):
-    material_name: str | None
-    editable: bool | None
+    material_name: Union[str, None]
+    editable: Union[bool, None]
 
 
 class GeorefLugar(BaseModel):
-    id: str | None
-    nombre: str | None
+    id: Union[str, None]
+    nombre: Union[str, None]
 
 
 class GeorefParametros(BaseModel):
@@ -90,9 +92,9 @@ class GeorefParametros(BaseModel):
 
 
 class GeorefUbicacion(BaseModel):
-    provincia: GeorefLugar | None
-    departamento: GeorefLugar | None
-    municipio: GeorefLugar | None
+    provincia: Union[GeorefLugar, None]
+    departamento: Union[GeorefLugar, None]
+    municipio: Union[GeorefLugar, None]
     lat: float
     lon: float
 

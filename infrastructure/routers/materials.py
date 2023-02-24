@@ -1,4 +1,5 @@
 import logging
+from typing import Union
 
 from fastapi import APIRouter
 from fastapi import Depends
@@ -29,7 +30,7 @@ async def create_material(
 
 @router.get('/', response_model=list[Material])
 async def list_materials(
-    enabled: bool | None = None,
+    enabled: Union[bool, None] = None,
     materials_usecases: MaterialsUseCases = Depends(materials_usecases_dependency),
 ):
     materials = await materials_usecases.list_materials(enabled)

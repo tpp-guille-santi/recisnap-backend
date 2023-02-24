@@ -20,7 +20,7 @@ def firebase_storage_repository_dependency() -> FirebaseStorageRepository:
 
 
 def georef_repository_dependency() -> GeorefRepository:
-    return GeorefRepository(settings.GEOREF_STORAGE_BASE_URL)
+    return GeorefRepository(settings.GEOREF_BASE_URL)
 
 
 def engine_dependency() -> AIOEngine:
