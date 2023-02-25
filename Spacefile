@@ -19,3 +19,7 @@ micros:
           description: Firebase Storage base URL
         - name: GEOREF_BASE_URL
           description: Georef base URL
+        - name: DETA_DRIVE
+          description: Deta drive to store files
+        - name: DETA_DRIVE_KEY
+          description: Deta drive project key

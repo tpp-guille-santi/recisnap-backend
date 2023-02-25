@@ -5,6 +5,7 @@ from odmantic import AIOEngine
 from domain.usecases.instructions_usecases import InstructionsUseCases
 from domain.usecases.materials_usecases import MaterialsUseCases
 from domain.usecases.users_usecases import UsersUseCases
+from infrastructure.repositories import DetaDriveRepository
 from infrastructure.repositories import FirebaseAuthRepository
 from infrastructure.repositories import FirebaseStorageRepository
 from infrastructure.repositories import GeorefRepository
@@ -17,6 +18,10 @@ def firebase_auth_repository_dependency() -> FirebaseAuthRepository:
 
 def firebase_storage_repository_dependency() -> FirebaseStorageRepository:
     return FirebaseStorageRepository(settings.FIREBASE_STORAGE_BASE_URL)
+
+
+def deta_drive_repository_dependency() -> DetaDriveRepository:
+    return DetaDriveRepository(settings.DETA_DRIVE_KEY, settings.DETA_DRIVE)
 
 
 def georef_repository_dependency() -> GeorefRepository:
@@ -44,8 +49,9 @@ def users_usecases_dependency(
 def instructions_usecases_dependency(
     engine: AIOEngine = Depends(engine_dependency),
     georef_repository: GeorefRepository = Depends(georef_repository_dependency),
+    deta_drive_repository: DetaDriveRepository = Depends(deta_drive_repository_dependency),
 ) -> InstructionsUseCases:
-    return InstructionsUseCases(engine, georef_repository)
+    return InstructionsUseCases(engine, georef_repository, deta_drive_repository)
 
 
 def materials_usecases_dependency(
