@@ -1,5 +1,5 @@
 asyncer==0.0.2
-deta
+deta==1.1.0
 fastapi==0.92.0
 firebase-admin==6.1.0
 httpx==0.23.3
