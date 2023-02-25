@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     FIREBASE_CREDENTIALS: str
     FIREBASE_STORAGE_BASE_URL: str
     GEOREF_BASE_URL: str
+    DETA_DRIVE: str
+    DETA_DRIVE_KEY: str
 
 
 settings = Settings()

@@ -2,7 +2,10 @@ import logging
 
 from fastapi import APIRouter
 from fastapi import Depends
+from fastapi import File
+from fastapi import Response
 from fastapi import status
+from fastapi.responses import StreamingResponse
 from odmantic import ObjectId
 
 from domain.entities import Instruction
@@ -72,3 +75,30 @@ async def delete_instruction_by_id(
 ):
     instruction = await instructions_usecases.delete_instruction_by_id(id)
     return instruction
+
+
+@router.post('/{id}/markdown')
+async def upload_instruction_markdown(
+    id: ObjectId,
+    file: bytes = File(),
+    instructions_usecases: InstructionsUseCases = Depends(instructions_usecases_dependency),
+):
+    await instructions_usecases.upload_file(id, file)
+    return Response()
+
+
+@router.get('/{id}/markdown')
+async def download_instruction_markdown(
+    id: ObjectId,
+    instructions_usecases: InstructionsUseCases = Depends(instructions_usecases_dependency),
+):
+    file = await instructions_usecases.download_file(id)
+    return StreamingResponse(content=file, media_type='text/plain')
+
+
+@router.get('/markdown/template')
+async def download_instructions_template_markdown(
+    instructions_usecases: InstructionsUseCases = Depends(instructions_usecases_dependency),
+):
+    file = await instructions_usecases.download_template()
+    return StreamingResponse(content=file, media_type='text/plain')
