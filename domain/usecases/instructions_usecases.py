@@ -48,7 +48,7 @@ class InstructionsUseCases:
     async def list_instructions(self) -> list[Instruction]:
         return await self.engine.find(Instruction)
 
-    async def search_instructions(self, search: InstructionSearch):
+    async def search_instructions(self, search: InstructionSearch) -> list[Instruction]:
         # This is the ideal code, but as it doesn't work, we are using a workaround
         # query_filters = self._generate_query_filters(search)
         # return await self.engine.find(Instruction, query_filters)
@@ -56,7 +56,7 @@ class InstructionsUseCases:
         query_filters = self._generate_query_filters(search)
         response = collection.find(query_filters)
         instructions = await response.to_list(length=None)
-        return [Instruction(**instruction) for instruction in instructions]
+        return [Instruction.parse_doc(instruction) for instruction in instructions]
 
     @staticmethod
     def _generate_query_filters(search: InstructionSearch) -> dict:
