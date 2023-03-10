@@ -1,10 +1,10 @@
 asyncer==0.0.2
 deta==1.1.0
-fastapi==0.92.0
+fastapi==0.94.0
 firebase-admin==6.1.0
 httpx==0.23.3
 motor==3.1.1
 odmantic==0.9.2
-pydantic[email]==1.10.5
-python-multipart==0.0.5
-uvicorn[standard]==0.20.0
+pydantic[email]==1.10.6
+python-multipart==0.0.6
+uvicorn[standard]==0.21.0
