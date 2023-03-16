@@ -27,6 +27,12 @@ class ModelNotFoundException(HTTPException):
         self.detail = f'Model {id} not found'
 
 
+class ImageNotFoundException(HTTPException):
+    def __init__(self, id: ObjectId):
+        self.status_code = status.HTTP_404_NOT_FOUND
+        self.detail = f'Image {id} not found'
+
+
 class NoModelsFoundException(HTTPException):
     def __init__(self):
         self.status_code = status.HTTP_404_NOT_FOUND

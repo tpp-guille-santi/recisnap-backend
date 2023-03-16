@@ -102,3 +102,15 @@ class GeorefUbicacion(BaseModel):
 class GeorefLocation(BaseModel):
     parametros: GeorefParametros
     ubicacion: GeorefUbicacion
+
+
+class Image(Model):
+    name: str
+    material_name: str
+    tags: Union[list[str], None] = None
+
+
+class ImageUpdate(Model):
+    name: Union[str, None] = None
+    material_name: Union[str, None] = None
+    tags: Union[list[str], None] = None

@@ -1,14 +1,21 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
+
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.0.2
+    hooks:
+      - id: autoflake
+        args: ["--remove-all-unused-imports", "--in-place"]
+
   - repo: https://github.com/psf/black
-    rev: 22.8.0
+    rev: 23.1.0
     hooks:
       - id: black
         args: [ --safe, --skip-string-normalization, --line-length=100 ]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -22,17 +29,17 @@ repos:
         language_version: python3
 
   - repo: https://github.com/dannysepler/rm_unneeded_f_str
-    rev: v0.1.0
+    rev: v0.2.0
     hooks:
       - id: rm-unneeded-f-str
 
   - repo: https://github.com/asottile/reorder_python_imports
-    rev: v3.8.3
+    rev: v3.9.0
     hooks:
       - id: reorder-python-imports
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 5.0.4
+    rev: 6.0.0
     hooks:
       - id: flake8
         language_version: python3

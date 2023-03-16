@@ -2,6 +2,7 @@ from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine
 
+from domain.usecases.images_usecases import ImagesUseCases
 from domain.usecases.instructions_usecases import InstructionsUseCases
 from domain.usecases.materials_usecases import MaterialsUseCases
 from domain.usecases.users_usecases import UsersUseCases
@@ -58,6 +59,13 @@ def materials_usecases_dependency(
     engine: AIOEngine = Depends(engine_dependency),
 ) -> MaterialsUseCases:
     return MaterialsUseCases(engine)
+
+
+def images_usecases_dependency(
+    engine: AIOEngine = Depends(engine_dependency),
+    deta_drive_repository: DetaDriveRepository = Depends(deta_drive_repository_dependency),
+) -> ImagesUseCases:
+    return ImagesUseCases(engine, deta_drive_repository)
 
 
 # def models_usecases_dependency(
