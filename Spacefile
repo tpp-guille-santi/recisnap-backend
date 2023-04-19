@@ -4,6 +4,8 @@ micros:
   - name: test-space
     src: .
     engine: python3.9
+    run: uvicorn main:app
+    dev: uvicorn main:app --reload
     primary: true
     public_routes:
       - "/*"
@@ -11,15 +13,22 @@ micros:
       env:
         - name: LOG_LEVEL
           description: Log level
+          default: "20"
         - name: MONGO_URL
           description: Mongo database URL
+          default: "mongodb+srv://databasemanager:8J6sHbbY4zegJ8Hv@cluster0.b3b5klh.mongodb.net/test"
         - name: FIREBASE_CREDENTIALS
           description: Firebase credentials
+          default: '{"type": "service_account","project_id": "recisnap","private_key_id": "2e33075d3f4943ae44805e4b7d1a79248f4a6c09","private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCVGXscQwmcoYpL\nAMA+hlTPHJKy4bgeSv93Yfg5mLg04cAGcrXqFbOfuAfIaoq0YMzzSVdS4cE3+5kY\nLwmLMWtToGl/fB81kmg8XcL/ZkkRLxA6hPAPAc2XvRU6+9cHNTVK8oQL5pC3VC2d\ngyMiinISZ1FWr2t2Crffvtpd/5oDPg/lgN+/Pems3xfp8gt/2mL/Fx9EKDlHgfXa\n8Nq6rJ2XP+SWw3asfNhy+A0zi8pxF9poZk/zvGGtZsJG/tXT4JQnvRIOfcYW2S6k\nkfMFIHmKm+8lEFJVgwG+mx81gkAENNLvJGTRrsFNca7+IKOCxa9RspKLRt1HdzDg\noBemd2DbAgMBAAECggEADpaEepfpMqza1zV2xHH9OJm+6rH2Az9q7mHPWRyi9/Ls\niFT54oeGtcZaO0GIBQJW8H4eWqAho69suQvadFwnTZ0reqCI0djbdP3m1yP0Bd05\nH8NOVObkGDK/sdqJHTiXWG1mU7Rr4rFhmICHqViqtOKXTT1y7K+Qx7CoieY5Hz7x\neNYk8m4Ffh+AX8tdtiHFV5wRbbvg5vmjWqI8v08+pYNiVwAIDlcXqamgfZ3OksLi\nwjD/Cep15Jans0QJDW+j4Ag7v5s8VPOnr5s2I//nfVRx7/s4wycZ8Z7a3yvW0ms7\nJIn2AMP6pbIfkGVNFdgm8vWqifqQsUTqexresk+2aQKBgQDN9nxqM3RxHpoOpmyO\nZT+DXd9YakvwLypCckdA+Il9Q8tItUI/pMKorslRdEBjMvMyJwyjcOKLXNdFj3ZT\nu+Mgn3rfvnrZltIR4oscAo+k9EU/N80O3pgol0DZGPWroRdK1NC9Ck5d87zhQNk/\nTLEz2+c9kjXmClBLq/lJZ3DyOQKBgQC5UnoeE3aysw2l9DxjLhGVDmn0A1ltyNa5\n5iI3USOWT7b3+G7XSmhttjKSwxhtCtXwfq750HoKTqYc1Dxkuw1m4Ee9zp43vi74\nlu0UN/L6RCoDyJ6PayHEQ7oLoo14t1OUbAVKExYt569/J5hx3btXCcnO5ujyxiP4\njE3jqIIbswKBgQCXpP0TwJDiXNK3KKfS7A8obOxuD82bqU5nH/cAij3I4iqBfRuq\n+mdshUyq0Xo6z5+p9IBksk/Kpm/FwowvuK3RLjrtFDUlkdtX2cHsvKIApO17T12G\nrjO/5yWS8sKnPHOG4ExUc4sht70A6JtL9O6frTCD7+wJVNyr6pIgDq5lWQKBgAPq\nm0wRazvBjvNH4xLRgWud/105yOUKDoelNmnm3BKsIpjA9k60ctqGtDDn0JdVWEoZ\n00bSQhH/sYEAdzpFvbXD3aBEQpG5AjMctWvs9sSVNjIYRkmPoQoNyFvAlq7LaQfE\n9KOpHZngwJO2WYFmhzQCr/IgbSHcUBxLksXR5NYDAoGBAIYAUlbvVTQGSdN9/HK0\nNDmzj9BCRH7ecweg3b5+CZF9QegrTq3hhWa9fWkJ7jXuGIiBLrCLHMGWMettkXJc\ngj2kpV5J0Y0/bAe5l4i0r2LsJ/1lEDqxPcdoggO99bj5AO3jzG++sjxx8keeAR94\nGDpbQXXp95ihXUXlRUF/rtvM\n-----END PRIVATE KEY-----\n","client_email": "firebase-adminsdk-5byr8@recisnap.iam.gserviceaccount.com","client_id": "101516090153094404761","auth_uri": "https://accounts.google.com/o/oauth2/auth","token_uri": "https://oauth2.googleapis.com/token","auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-5byr8%40recisnap.iam.gserviceaccount.com"}'
         - name: FIREBASE_STORAGE_BASE_URL
           description: Firebase Storage base URL
+          default: "https://firebasestorage.googleapis.com/v0/b/recisnap.appspot.com/o"
         - name: GEOREF_BASE_URL
           description: Georef base URL
+          default: "https://apis.datos.gob.ar/georef/api/ubicacion?"
         - name: DETA_DRIVE
           description: Deta drive to store files
+          default: "recisnap-markdowns"
         - name: DETA_DRIVE_KEY
           description: Deta drive project key
+          default: "e0hyt1vkbda_JTiN4tqhkUXmcMPe6H81MAsJRb6Uax7v"

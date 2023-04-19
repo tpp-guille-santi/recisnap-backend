@@ -1,3 +1,4 @@
+import certifi
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine
@@ -30,7 +31,8 @@ def georef_repository_dependency() -> GeorefRepository:
 
 
 def engine_dependency() -> AIOEngine:
-    client = AsyncIOMotorClient(settings.MONGO_URL)
+    print(settings.MONGO_URL)
+    client = AsyncIOMotorClient(settings.MONGO_URL, tlsCAFile=certifi.where())
     return AIOEngine(client=client, database=settings.DATABASE_NAME)
 
 

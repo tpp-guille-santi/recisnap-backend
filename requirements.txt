@@ -1,6 +1,6 @@
 asyncer==0.0.2
 deta==1.1.0
-fastapi==0.94.0
+fastapi==0.95.1
 firebase-admin==6.1.0
 httpx==0.23.3
 motor==3.1.1

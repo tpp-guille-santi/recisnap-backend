@@ -62,7 +62,7 @@ class InstructionsUseCases:
     def _generate_query_filters(search: InstructionSearch) -> dict:
         query_filters = {
             'geo_json': {
-                '$near': {
+                '$geoNear': {
                     '$geometry': {'type': 'Point', 'coordinates': [search.lon, search.lat]},
                     '$maxDistance': search.max_distance,
                 }
