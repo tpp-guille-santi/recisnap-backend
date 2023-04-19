@@ -31,7 +31,7 @@ async def list_users(users_usecases: UsersUseCases = Depends(users_usecases_depe
     return users
 
 
-@router.get('/{firebase_uid}', response_model=User)
+@router.get('/{firebase_uid}/', response_model=User)
 async def get_user_by_firebase_uid(
     firebase_uid: str, users_usecases: UsersUseCases = Depends(users_usecases_dependency)
 ):
@@ -39,7 +39,7 @@ async def get_user_by_firebase_uid(
     return user
 
 
-@router.patch('/{firebase_uid}', response_model=User)
+@router.patch('/{firebase_uid}/', response_model=User)
 async def update_user_by_firebase_uid(
     firebase_uid: str,
     patch: UserUpdate,
@@ -49,7 +49,7 @@ async def update_user_by_firebase_uid(
     return user
 
 
-@router.delete('/{firebase_uid}', response_model=User)
+@router.delete('/{firebase_uid}/', response_model=User)
 async def delete_user_by_firebase_uid(
     firebase_uid: str, users_usecases: UsersUseCases = Depends(users_usecases_dependency)
 ):
