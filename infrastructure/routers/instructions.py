@@ -40,7 +40,7 @@ async def list_instructions(
     return instructions
 
 
-@router.post('/search', response_model=list[Instruction])
+@router.post('/search/', response_model=list[Instruction])
 async def search_instructions(
     search: InstructionSearch,
     instructions_usecases: InstructionsUseCases = Depends(instructions_usecases_dependency),
@@ -49,7 +49,7 @@ async def search_instructions(
     return instructions
 
 
-@router.get('/{id}', response_model=Instruction)
+@router.get('/{id}/', response_model=Instruction)
 async def get_instruction_by_id(
     id: ObjectId,
     instructions_usecases: InstructionsUseCases = Depends(instructions_usecases_dependency),
@@ -58,7 +58,7 @@ async def get_instruction_by_id(
     return instruction
 
 
-@router.patch('/{id}', response_model=Instruction)
+@router.patch('/{id}/', response_model=Instruction)
 async def update_instruction_by_id(
     id: ObjectId,
     patch: InstructionUpdate,
@@ -68,7 +68,7 @@ async def update_instruction_by_id(
     return instruction
 
 
-@router.delete('/{id}', response_model=Instruction)
+@router.delete('/{id}/', response_model=Instruction)
 async def delete_instruction_by_id(
     id: ObjectId,
     instructions_usecases: InstructionsUseCases = Depends(instructions_usecases_dependency),
@@ -77,7 +77,7 @@ async def delete_instruction_by_id(
     return instruction
 
 
-@router.post('/{id}/markdown')
+@router.post('/{id}/markdown/')
 async def upload_instruction_markdown(
     id: ObjectId,
     file: bytes = File(),
@@ -87,7 +87,7 @@ async def upload_instruction_markdown(
     return Response()
 
 
-@router.get('/{id}/markdown')
+@router.get('/{id}/markdown/')
 async def download_instruction_markdown(
     id: ObjectId,
     instructions_usecases: InstructionsUseCases = Depends(instructions_usecases_dependency),
@@ -96,7 +96,7 @@ async def download_instruction_markdown(
     return StreamingResponse(content=file, media_type='text/plain')
 
 
-@router.get('/markdown/template')
+@router.get('/markdown/template/')
 async def download_instructions_template_markdown(
     instructions_usecases: InstructionsUseCases = Depends(instructions_usecases_dependency),
 ):

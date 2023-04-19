@@ -38,7 +38,7 @@ async def list_images(
     return images
 
 
-@router.get('/{id}', response_model=Image)
+@router.get('/{id}/', response_model=Image)
 async def get_image_by_id(
     id: ObjectId,
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),
@@ -47,7 +47,7 @@ async def get_image_by_id(
     return image
 
 
-@router.patch('/{id}', response_model=Image)
+@router.patch('/{id}/', response_model=Image)
 async def update_image_by_id(
     id: ObjectId,
     patch: ImageUpdate,
@@ -57,7 +57,7 @@ async def update_image_by_id(
     return image
 
 
-@router.delete('/{id}', response_model=Image)
+@router.delete('/{id}/', response_model=Image)
 async def delete_image_by_id(
     id: ObjectId,
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),
@@ -66,7 +66,7 @@ async def delete_image_by_id(
     return image
 
 
-@router.post('/file/{filename}')
+@router.post('/file/{filename}/')
 async def upload_image(
     filename: str,
     file: bytes = File(),
@@ -76,7 +76,7 @@ async def upload_image(
     return Response()
 
 
-@router.get('/file/{filename}')
+@router.get('/file/{filename}/')
 async def download_image(
     filename: str,
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),

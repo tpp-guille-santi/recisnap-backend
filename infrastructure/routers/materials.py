@@ -37,7 +37,7 @@ async def list_materials(
     return materials
 
 
-@router.get('/{id}', response_model=Material)
+@router.get('/{id}/', response_model=Material)
 async def get_material_by_id(
     id: ObjectId, materials_usecases: MaterialsUseCases = Depends(materials_usecases_dependency)
 ):
@@ -45,7 +45,7 @@ async def get_material_by_id(
     return material
 
 
-@router.patch('/{id}', response_model=Material)
+@router.patch('/{id}/', response_model=Material)
 async def update_material_by_id(
     id: ObjectId,
     patch: MaterialUpdate,
@@ -55,7 +55,7 @@ async def update_material_by_id(
     return material
 
 
-@router.delete('/{id}', response_model=Material)
+@router.delete('/{id}/', response_model=Material)
 async def delete_material_by_id(
     id: ObjectId, materials_usecases: MaterialsUseCases = Depends(materials_usecases_dependency)
 ):
