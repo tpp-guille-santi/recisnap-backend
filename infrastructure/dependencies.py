@@ -31,7 +31,6 @@ def georef_repository_dependency() -> GeorefRepository:
 
 
 def engine_dependency() -> AIOEngine:
-    print(settings.MONGO_URL)
     client = AsyncIOMotorClient(settings.MONGO_URL, tlsCAFile=certifi.where())
     return AIOEngine(client=client, database=settings.DATABASE_NAME)
 
