@@ -8,12 +8,12 @@ from fastapi import status
 from fastapi.responses import StreamingResponse
 from odmantic import ObjectId
 
-from domain.entities import Instruction
-from domain.entities import InstructionCreate
-from domain.entities import InstructionSearch
-from domain.entities import InstructionUpdate
-from domain.usecases.instructions_usecases import InstructionsUseCases
-from infrastructure.dependencies import instructions_usecases_dependency
+from app.domain.entities import Instruction
+from app.domain.entities import InstructionCreate
+from app.domain.entities import InstructionSearch
+from app.domain.entities import InstructionUpdate
+from app.domain.usecases.instructions_usecases import InstructionsUseCases
+from app.infrastructure.dependencies import instructions_usecases_dependency
 
 LOGGER = logging.getLogger(__name__)
 

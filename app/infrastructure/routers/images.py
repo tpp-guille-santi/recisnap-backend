@@ -8,10 +8,10 @@ from fastapi import status
 from fastapi.responses import StreamingResponse
 from odmantic import ObjectId
 
-from domain.entities import Image
-from domain.entities import ImageUpdate
-from domain.usecases.images_usecases import ImagesUseCases
-from infrastructure.dependencies import images_usecases_dependency
+from app.domain.entities import Image
+from app.domain.entities import ImageUpdate
+from app.domain.usecases.images_usecases import ImagesUseCases
+from app.infrastructure.dependencies import images_usecases_dependency
 
 LOGGER = logging.getLogger(__name__)
 

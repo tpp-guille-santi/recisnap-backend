@@ -2,10 +2,10 @@ import logging
 
 from odmantic import AIOEngine
 
-from domain.entities import User
-from domain.entities import UserUpdate
-from domain.errors import UserNotFoundException
-from infrastructure.repositories import FirebaseAuthRepository
+from app.domain.entities import User
+from app.domain.entities import UserUpdate
+from app.domain.errors import UserNotFoundException
+from app.infrastructure.repositories import FirebaseAuthRepository
 
 LOGGER = logging.getLogger(__name__)
 

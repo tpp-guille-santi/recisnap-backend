@@ -3,15 +3,15 @@ from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine
 
-from domain.usecases.images_usecases import ImagesUseCases
-from domain.usecases.instructions_usecases import InstructionsUseCases
-from domain.usecases.materials_usecases import MaterialsUseCases
-from domain.usecases.users_usecases import UsersUseCases
-from infrastructure.repositories import DetaDriveRepository
-from infrastructure.repositories import FirebaseAuthRepository
-from infrastructure.repositories import FirebaseStorageRepository
-from infrastructure.repositories import GeorefRepository
-from infrastructure.settings import settings
+from app.domain.usecases.images_usecases import ImagesUseCases
+from app.domain.usecases.instructions_usecases import InstructionsUseCases
+from app.domain.usecases.materials_usecases import MaterialsUseCases
+from app.domain.usecases.users_usecases import UsersUseCases
+from app.infrastructure.repositories import DetaDriveRepository
+from app.infrastructure.repositories import FirebaseAuthRepository
+from app.infrastructure.repositories import FirebaseStorageRepository
+from app.infrastructure.repositories import GeorefRepository
+from app.infrastructure.settings import settings
 
 
 def firebase_auth_repository_dependency() -> FirebaseAuthRepository:

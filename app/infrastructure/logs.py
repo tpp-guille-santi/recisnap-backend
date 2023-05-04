@@ -1,6 +1,6 @@
 import logging
 
-from infrastructure.context import trace_id
+from app.infrastructure.context import trace_id
 
 LOGGER_FORMAT = '[%(asctime)s] [%(levelname)s] [%(trace_id)s] [%(name)s] %(message)s'
 
