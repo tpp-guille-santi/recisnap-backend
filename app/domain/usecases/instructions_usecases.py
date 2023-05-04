@@ -3,14 +3,14 @@ import logging
 from odmantic import AIOEngine
 from odmantic import ObjectId
 
-from domain.entities import GeoJSON
-from domain.entities import Instruction
-from domain.entities import InstructionCreate
-from domain.entities import InstructionSearch
-from domain.entities import InstructionUpdate
-from domain.errors import InstructionNotFoundException
-from domain.repositories import AbstractDetaDriveRepository
-from infrastructure.repositories import GeorefRepository
+from app.domain.entities import GeoJSON
+from app.domain.entities import Instruction
+from app.domain.entities import InstructionCreate
+from app.domain.entities import InstructionSearch
+from app.domain.entities import InstructionUpdate
+from app.domain.errors import InstructionNotFoundException
+from app.domain.repositories import AbstractDetaDriveRepository
+from app.infrastructure.repositories import GeorefRepository
 
 LOGGER = logging.getLogger(__name__)
 

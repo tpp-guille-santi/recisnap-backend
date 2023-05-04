@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 from deta.drive import DriveStreamingBody
 
-from domain.entities import GeorefLocation
+from app.domain.entities import GeorefLocation
 
 
 class AbstractFirebaseAuthRepository(ABC):

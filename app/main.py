@@ -8,13 +8,13 @@ from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import credentials
 
-from infrastructure.context import trace_id
-from infrastructure.logs import configure_logging
-from infrastructure.routers import health
-from infrastructure.routers import instructions
-from infrastructure.routers import materials
-from infrastructure.routers import users
-from infrastructure.settings import settings
+from app.infrastructure.context import trace_id
+from app.infrastructure.logs import configure_logging
+from app.infrastructure.routers import health
+from app.infrastructure.routers import instructions
+from app.infrastructure.routers import materials
+from app.infrastructure.routers import users
+from app.infrastructure.settings import settings
 
 LOGGER = logging.getLogger(__name__)
 

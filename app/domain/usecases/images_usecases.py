@@ -3,10 +3,10 @@ import logging
 from odmantic import AIOEngine
 from odmantic import ObjectId
 
-from domain.entities import Image
-from domain.entities import ImageUpdate
-from domain.errors import ImageNotFoundException
-from domain.repositories import AbstractDetaDriveRepository
+from app.domain.entities import Image
+from app.domain.entities import ImageUpdate
+from app.domain.errors import ImageNotFoundException
+from app.domain.repositories import AbstractDetaDriveRepository
 
 LOGGER = logging.getLogger(__name__)
 

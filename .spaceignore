@@ -4,13 +4,10 @@
 *.pyc
 .DS_Store
 .pytest_cache/
-.env
+
 .venv
 env/
-venv/
 
-# PyCharm
-.idea/
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
@@ -147,10 +144,16 @@ cython_debug/
 /recisnap-firebase-adminsdk-5byr8-2e33075d3f.json
 
 .git/
+.github/
+.idea/
+.ruff_cache/
+venv/
+.env
 .env.example
 .gitignore
 .pre-commit-config.yaml
 docker-compose.dev.yml
+docker-compose.yml
 Dockerfile
 heroku.yml
 local_dev.sh

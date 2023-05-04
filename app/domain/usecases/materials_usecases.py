@@ -4,9 +4,9 @@ from typing import Union
 from odmantic import AIOEngine
 from odmantic import ObjectId
 
-from domain.entities import Material
-from domain.entities import MaterialUpdate
-from domain.errors import MaterialNotFoundException
+from app.domain.entities import Material
+from app.domain.entities import MaterialUpdate
+from app.domain.errors import MaterialNotFoundException
 
 LOGGER = logging.getLogger(__name__)
 

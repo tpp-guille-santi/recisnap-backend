@@ -6,11 +6,11 @@ from deta import Deta
 from deta.drive import DriveStreamingBody
 from firebase_admin import auth
 
-from domain.entities import GeorefLocation
-from domain.repositories import AbstractDetaDriveRepository
-from domain.repositories import AbstractFirebaseAuthRepository
-from domain.repositories import AbstractFirebaseStorageRepository
-from domain.repositories import AbstractGeorefRepository
+from app.domain.entities import GeorefLocation
+from app.domain.repositories import AbstractDetaDriveRepository
+from app.domain.repositories import AbstractFirebaseAuthRepository
+from app.domain.repositories import AbstractFirebaseStorageRepository
+from app.domain.repositories import AbstractGeorefRepository
 
 LOGGER = logging.getLogger(__name__)
 

@@ -4,10 +4,10 @@ from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import status
 
-from domain.entities import User
-from domain.entities import UserUpdate
-from domain.usecases.users_usecases import UsersUseCases
-from infrastructure.dependencies import users_usecases_dependency
+from app.domain.entities import User
+from app.domain.entities import UserUpdate
+from app.domain.usecases.users_usecases import UsersUseCases
+from app.infrastructure.dependencies import users_usecases_dependency
 
 LOGGER = logging.getLogger(__name__)
 

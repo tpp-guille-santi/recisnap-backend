@@ -6,10 +6,10 @@ from fastapi import Depends
 from fastapi import status
 from odmantic import ObjectId
 
-from domain.entities import Material
-from domain.entities import MaterialUpdate
-from domain.usecases.materials_usecases import MaterialsUseCases
-from infrastructure.dependencies import materials_usecases_dependency
+from app.domain.entities import Material
+from app.domain.entities import MaterialUpdate
+from app.domain.usecases.materials_usecases import MaterialsUseCases
+from app.infrastructure.dependencies import materials_usecases_dependency
 
 LOGGER = logging.getLogger(__name__)
 
