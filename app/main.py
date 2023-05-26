@@ -11,6 +11,7 @@ from firebase_admin import credentials
 from app.infrastructure.context import trace_id
 from app.infrastructure.logs import configure_logging
 from app.infrastructure.routers import health
+from app.infrastructure.routers import images
 from app.infrastructure.routers import instructions
 from app.infrastructure.routers import materials
 from app.infrastructure.routers import users
@@ -56,3 +57,4 @@ app.include_router(health.router)
 app.include_router(users.router)
 app.include_router(materials.router)
 app.include_router(instructions.router)
+app.include_router(images.router)
