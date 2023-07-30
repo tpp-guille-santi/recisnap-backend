@@ -1,7 +1,10 @@
 import logging
+from typing import Union
 
 from odmantic import AIOEngine
 from odmantic import ObjectId
+from odmantic import query
+from odmantic.query import QueryExpression
 
 from app.domain.entities import Image
 from app.domain.entities import ImageUpdate
@@ -9,6 +12,20 @@ from app.domain.errors import ImageNotFoundException
 from app.domain.repositories import AbstractDetaDriveRepository
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _get_search_params(params: Union[ImageUpdate, None]) -> list[QueryExpression]:
+    query_filters = []
+    print(params)
+    if params is not None:
+        if params.material_name is not None:
+            query_filters.append(Image.material_name == params.material_name)
+        if params.downloaded is not None:
+            query_filters.append(Image.downloaded == params.downloaded)
+        if params.tags is not None:
+            for tag in params.tags:
+                query_filters.append(query.in_(Image.tags, [tag]))
+    return query_filters
 
 
 class ImagesUseCases:
@@ -24,9 +41,10 @@ class ImagesUseCases:
         image = await self.engine.save(image)
         return image
 
-    async def list_images(self) -> list[Image]:
-        image = await self.engine.find(Image)
-        return image
+    async def list_images(self, params: Union[ImageUpdate, None]) -> list[Image]:
+        query_filters = _get_search_params(params)
+        images = await self.engine.find(Image, *query_filters)
+        return images
 
     async def get_image_by_id(self, id: ObjectId) -> Image:
         image = await self.engine.find_one(Image, Image.id == id)
@@ -55,3 +73,7 @@ class ImagesUseCases:
     async def download_image(self, filename):
         file = await self.deta_drive_repository.download_file(filename)
         return file.iter_chunks()
+
+    async def get_images_count(self, params: Union[ImageUpdate, None]) -> int:
+        query_filters = _get_search_params(params)
+        return await self.engine.count(Image, *query_filters)

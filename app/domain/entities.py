@@ -107,10 +107,12 @@ class GeorefLocation(BaseModel):
 class Image(Model):
     filename: str
     material_name: str
+    downloaded: bool = False
     tags: Union[list[str], None] = None
 
 
-class ImageUpdate(Model):
+class ImageUpdate(BaseModel):
     filename: Union[str, None] = None
     material_name: Union[str, None] = None
     tags: Union[list[str], None] = None
+    downloaded: Union[bool, None] = None

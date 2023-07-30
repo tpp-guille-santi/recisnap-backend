@@ -28,6 +28,14 @@ async def create_material(
     return material
 
 
+@router.get('/latest/', response_model=Material)
+async def get_latest_material(
+    materials_usecases: MaterialsUseCases = Depends(materials_usecases_dependency),
+):
+    material = await materials_usecases.get_latest_material()
+    return material
+
+
 @router.get('/', response_model=list[Material])
 async def list_materials(
     enabled: Union[bool, None] = None,

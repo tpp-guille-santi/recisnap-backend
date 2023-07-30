@@ -11,6 +11,7 @@ select = [
     "UP",  # pyupgrade
     "C4",  # flake8-comprehensions
     "B",  # flake8-bugbear
+    "Q",  # flake8-quotes
 ]
 
 ignore = [
@@ -18,6 +19,9 @@ ignore = [
     "B008",
     "C901",
 ]
+
+fixable = ["ALL"]
+unfixable = []
 
 exclude = [
     ".bzr",
@@ -51,6 +55,10 @@ max-complexity = 10
 
 [tool.ruff.isort]
 force-single-line = true
+
+[tool.ruff.flake8-quotes]
+inline-quotes = "single"
+multiline-quotes = "single"
 
 [tool.poetry]
 name = "image-predictor-service"
