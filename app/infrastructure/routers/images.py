@@ -11,6 +11,7 @@ from fastapi.responses import StreamingResponse
 from odmantic import ObjectId
 
 from app.domain.entities import Image
+from app.domain.entities import ImageSearch
 from app.domain.entities import ImageUpdate
 from app.domain.usecases.images_usecases import ImagesUseCases
 from app.infrastructure.dependencies import images_usecases_dependency
@@ -41,7 +42,7 @@ async def list_images(
     downloaded: Union[bool, None] = None,
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),
 ):
-    params = ImageUpdate(
+    params = ImageSearch(
         filename=filename, material_name=material_name, tags=tags, downloaded=downloaded
     )
     images = await images_usecases.list_images(params)
@@ -56,7 +57,7 @@ async def get_images_count(
     downloaded: Union[bool, None] = None,
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),
 ):
-    params = ImageUpdate(
+    params = ImageSearch(
         filename=filename, material_name=material_name, tags=tags, downloaded=downloaded
     )
     count = await images_usecases.get_images_count(params)
