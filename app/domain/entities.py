@@ -111,8 +111,12 @@ class Image(Model):
     tags: Union[list[str], None] = None
 
 
-class ImageUpdate(BaseModel):
+class ImageSearch(BaseModel):
     filename: Union[str, None] = None
     material_name: Union[str, None] = None
+    downloaded: Union[bool, None] = None
     tags: Union[list[str], None] = None
+
+
+class ImageUpdate(BaseModel):
     downloaded: Union[bool, None] = None
