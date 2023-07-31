@@ -18,6 +18,8 @@ def _get_search_params(params: Union[ImageUpdate, None]) -> list[QueryExpression
     query_filters = []
     print(params)
     if params is not None:
+        if params.filename is not None:
+            query_filters.append(Image.filename == params.filename)
         if params.material_name is not None:
             query_filters.append(Image.material_name == params.material_name)
         if params.downloaded is not None:
