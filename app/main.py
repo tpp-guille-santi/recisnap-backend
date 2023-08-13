@@ -14,6 +14,7 @@ from app.infrastructure.routers import health
 from app.infrastructure.routers import images
 from app.infrastructure.routers import instructions
 from app.infrastructure.routers import materials
+from app.infrastructure.routers import models
 from app.infrastructure.routers import users
 from app.infrastructure.settings import settings
 
@@ -56,5 +57,6 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(users.router)
 app.include_router(materials.router)
+app.include_router(models.router)
 app.include_router(instructions.router)
 app.include_router(images.router)

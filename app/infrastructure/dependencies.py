@@ -6,6 +6,7 @@ from odmantic import AIOEngine
 from app.domain.usecases.images_usecases import ImagesUseCases
 from app.domain.usecases.instructions_usecases import InstructionsUseCases
 from app.domain.usecases.materials_usecases import MaterialsUseCases
+from app.domain.usecases.models_usecases import ModelsUseCases
 from app.domain.usecases.users_usecases import UsersUseCases
 from app.infrastructure.repositories import DetaDriveRepository
 from app.infrastructure.repositories import FirebaseAuthRepository
@@ -69,7 +70,7 @@ def images_usecases_dependency(
     return ImagesUseCases(engine, deta_drive_repository)
 
 
-# def models_usecases_dependency(
-#         engine: AIOEngine = Depends(engine_dependency),
-# ) -> ModelsUseCases:
-#     return ModelsUseCases(engine)
+def models_usecases_dependency(
+    engine: AIOEngine = Depends(engine_dependency),
+) -> ModelsUseCases:
+    return ModelsUseCases(engine)

@@ -37,13 +37,13 @@ class MaterialPrediction(Model):
 
 
 class MLModel(Model):
-    name: str
     timestamp: int
+    accuracy: float
 
 
 class MLModelUpdate(BaseModel):
-    name: Union[str, None] = None
     timestamp: Union[int, None] = None
+    accuracy: Union[float, None] = None
 
 
 class GeoJSON(BaseModel):
