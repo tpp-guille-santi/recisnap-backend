@@ -108,4 +108,8 @@ async def download_image(
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),
 ):
     file = await images_usecases.download_image(filename)
-    return StreamingResponse(content=file, media_type='text/plain')
+    return StreamingResponse(
+        content=file,
+        media_type=f'image/{filename.split(".")[-1]}',
+        headers={'Content-Disposition': f'inline; filename="{filename}"'},
+    )
