@@ -6,15 +6,15 @@ Nanoservice that receives an image and returns the detected material.
 
 To build the application:
 
-`docker compose -f docker-compose.dev.yml build`
+`docker compose build`
 
 To run the application:
 
-`docker compose -f docker-compose.dev.yml up`
+`docker compose up`
 
 To stop the application:
 
-`docker compose -f docker-compose.dev.yml down`
+`docker compose down`
 
 To add env variables to heroku
 
