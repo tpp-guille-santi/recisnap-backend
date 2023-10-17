@@ -36,15 +36,9 @@ async def create_image(
 
 @router.get('/', response_model=list[Image])
 async def list_images(
-    filename: Union[str, None] = None,
-    material_name: Union[str, None] = None,
-    tags: Union[list[str], None] = Query(default=None),
-    downloaded: Union[bool, None] = None,
+    params: ImageSearch = Depends(ImageSearch),
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),
 ):
-    params = ImageSearch(
-        filename=filename, material_name=material_name, tags=tags, downloaded=downloaded
-    )
     images = await images_usecases.list_images(params)
     return images
 
