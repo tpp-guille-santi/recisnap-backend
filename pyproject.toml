@@ -2,27 +2,6 @@
 requires-python = ">=3.9"
 
 [tool.ruff]
-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "N",  # pep8-naming
-    "I",  # isort
-    "UP",  # pyupgrade
-    "C4",  # flake8-comprehensions
-    "B",  # flake8-bugbear
-    "Q",  # flake8-quotes
-]
-
-ignore = [
-    "E501",
-    "B008",
-    "C901",
-]
-
-fixable = ["ALL"]
-unfixable = []
-
 exclude = [
     ".bzr",
     ".direnv",
@@ -45,10 +24,26 @@ exclude = [
     "node_modules",
     "venv",
 ]
-
 line-length = 100
-
 target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "N",  # pep8-naming
+    "I",  # isort
+    "UP",  # pyupgrade
+    "C4",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "Q",  # flake8-quotes
+]
+ignore = [
+    "B008",
+]
+fixable = ["ALL"]
+unfixable = []
 
 [tool.ruff.mccabe]
 max-complexity = 10
@@ -59,6 +54,10 @@ force-single-line = true
 [tool.ruff.flake8-quotes]
 inline-quotes = "single"
 multiline-quotes = "single"
+
+[tool.ruff.format]
+quote-style = "single"
+line-ending = "lf"
 
 [tool.poetry]
 name = "image-predictor-service"
