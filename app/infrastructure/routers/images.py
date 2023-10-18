@@ -1,10 +1,8 @@
 import logging
-from typing import Union
 
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import File
-from fastapi import Query
 from fastapi import Response
 from fastapi import status
 from fastapi.responses import StreamingResponse
@@ -36,7 +34,7 @@ async def create_image(
 
 @router.get('/', response_model=list[Image])
 async def list_images(
-    params: ImageSearch = Depends(ImageSearch),
+    params: ImageSearch = Depends(),
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),
 ):
     images = await images_usecases.list_images(params)
@@ -45,15 +43,9 @@ async def list_images(
 
 @router.get('/count/', response_model=ImagesCountResponse)
 async def get_images_count(
-    filename: Union[str, None] = None,
-    material_name: Union[str, None] = None,
-    tags: Union[list[str], None] = Query(default=None),
-    downloaded: Union[bool, None] = None,
+    params: ImageSearch = Depends(),
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),
 ):
-    params = ImageSearch(
-        filename=filename, material_name=material_name, tags=tags, downloaded=downloaded
-    )
     count = await images_usecases.get_images_count(params)
     return ImagesCountResponse(count=count)
 

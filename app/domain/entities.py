@@ -1,8 +1,10 @@
 from typing import Union
 
+from fastapi import Query
 from odmantic import Model
 from pydantic import BaseModel
 from pydantic import EmailStr
+from pydantic import Field
 
 
 class User(Model):
@@ -115,7 +117,7 @@ class ImageSearch(BaseModel):
     filename: Union[str, None] = None
     material_name: Union[str, None] = None
     downloaded: Union[bool, None] = None
-    tags: Union[list[str], None] = None
+    tags: Union[list[str], None] = Field(Query(default=None))
 
 
 class ImageUpdate(BaseModel):
