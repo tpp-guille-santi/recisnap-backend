@@ -3,7 +3,7 @@ v: 0
 micros:
   - name: test-space
     src: .
-    engine: python3.9
+    engine: python3.11
     run: uvicorn app.main:app
     dev: uvicorn app.main:app --reload
     primary: true

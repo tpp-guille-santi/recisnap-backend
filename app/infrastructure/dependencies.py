@@ -11,7 +11,6 @@ from app.domain.usecases.users_usecases import UsersUseCases
 from app.infrastructure.repositories import DetaDriveRepository
 from app.infrastructure.repositories import FirebaseAuthRepository
 from app.infrastructure.repositories import FirebaseStorageRepository
-from app.infrastructure.repositories import GeorefRepository
 from app.infrastructure.settings import settings
 
 
@@ -27,19 +26,9 @@ def deta_drive_repository_dependency() -> DetaDriveRepository:
     return DetaDriveRepository(settings.DETA_DRIVE_KEY, settings.DETA_DRIVE)
 
 
-def georef_repository_dependency() -> GeorefRepository:
-    return GeorefRepository(settings.GEOREF_BASE_URL)
-
-
 def engine_dependency() -> AIOEngine:
     client = AsyncIOMotorClient(settings.MONGO_URL, tlsCAFile=certifi.where())
     return AIOEngine(client=client, database=settings.DATABASE_NAME)
-
-
-# def usecases_dependency(
-#     engine: AIOEngine = Depends(engine_dependency),
-# ) -> UseCases:
-#     return UseCases()
 
 
 def users_usecases_dependency(
@@ -51,10 +40,9 @@ def users_usecases_dependency(
 
 def instructions_usecases_dependency(
     engine: AIOEngine = Depends(engine_dependency),
-    georef_repository: GeorefRepository = Depends(georef_repository_dependency),
     deta_drive_repository: DetaDriveRepository = Depends(deta_drive_repository_dependency),
 ) -> InstructionsUseCases:
-    return InstructionsUseCases(engine, georef_repository, deta_drive_repository)
+    return InstructionsUseCases(engine, deta_drive_repository)
 
 
 def materials_usecases_dependency(

@@ -10,7 +10,6 @@ from app.domain.entities import InstructionSearch
 from app.domain.entities import InstructionUpdate
 from app.domain.errors import InstructionNotFoundException
 from app.domain.repositories import AbstractDetaDriveRepository
-from app.infrastructure.repositories import GeorefRepository
 
 LOGGER = logging.getLogger(__name__)
 
@@ -19,19 +18,12 @@ class InstructionsUseCases:
     def __init__(
         self,
         engine: AIOEngine,
-        georef_repository: GeorefRepository,
         deta_drive_repository: AbstractDetaDriveRepository,
     ):
         self.engine = engine
-        self.georef_repository = georef_repository
         self.deta_drive_repository = deta_drive_repository
 
     async def create_instruction(self, create: InstructionCreate) -> Instruction:
-        georef_location = await self.georef_repository.get_georef_location(create.lat, create.lon)
-        ubicacion = georef_location.ubicacion
-        provincia = ubicacion.provincia.nombre if ubicacion.provincia else None
-        departamento = ubicacion.departamento.nombre if ubicacion.departamento else None
-        municipio = ubicacion.municipio.nombre if ubicacion.municipio else None
         geo_json = GeoJSON(coordinates=(create.lon, create.lat))
         instruction = Instruction(
             material_name=create.material_name,
@@ -39,9 +31,6 @@ class InstructionsUseCases:
             lat=create.lat,
             lon=create.lon,
             geo_json=geo_json,
-            municipio=municipio,
-            provincia=provincia,
-            departamento=departamento,
         )
         return await self.engine.save(instruction)
 

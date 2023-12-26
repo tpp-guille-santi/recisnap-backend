@@ -1,5 +1,4 @@
 import logging
-from typing import Union
 
 from odmantic import AIOEngine
 from odmantic import ObjectId
@@ -15,7 +14,7 @@ from app.domain.repositories import AbstractDetaDriveRepository
 LOGGER = logging.getLogger(__name__)
 
 
-def _get_search_params(params: Union[ImageSearch, None]) -> list[QueryExpression]:
+def _get_search_params(params: ImageSearch | None) -> list[QueryExpression]:
     query_filters = []
     if params is not None:
         if params.filename is not None:
@@ -43,7 +42,7 @@ class ImagesUseCases:
         image = await self.engine.save(image)
         return image
 
-    async def list_images(self, params: Union[ImageSearch, None]) -> list[Image]:
+    async def list_images(self, params: ImageSearch | None) -> list[Image]:
         query_filters = _get_search_params(params)
         images = await self.engine.find(Image, *query_filters)
         return images
@@ -76,7 +75,7 @@ class ImagesUseCases:
         file = await self.deta_drive_repository.download_file(filename)
         return file.iter_chunks()
 
-    async def get_images_count(self, params: Union[ImageSearch, None]) -> int:
+    async def get_images_count(self, params: ImageSearch | None) -> int:
         query_filters = _get_search_params(params)
         count = await self.engine.count(Image, *query_filters)
         return count

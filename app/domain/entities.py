@@ -1,5 +1,3 @@
-from typing import Union
-
 from fastapi import Query
 from odmantic import Model
 from pydantic import BaseModel
@@ -9,15 +7,15 @@ from pydantic import Field
 
 class User(Model):
     firebase_uid: str
-    name: Union[str, None] = None
-    email: Union[EmailStr, None] = None
-    permissions: Union[list[str], None] = ['view_instructions']
+    permissions: list[str] = []
+    name: str
+    email: EmailStr
 
 
 class UserUpdate(BaseModel):
-    name: Union[str, None] = None
-    email: Union[EmailStr, None] = None
-    permissions: Union[list[str], None] = None
+    permissions: list[str] | None = None
+    name: str | None = None
+    email: EmailStr | None = None
 
 
 class Material(Model):
@@ -27,15 +25,9 @@ class Material(Model):
 
 
 class MaterialUpdate(BaseModel):
-    name: Union[str, None] = None
-    order: Union[int, None] = None
-    enabled: Union[bool, None] = None
-
-
-class MaterialPrediction(Model):
-    image_id: str
-    name: str
-    tags: Union[list[str], None] = None
+    name: str | None = None
+    order: int | None = None
+    enabled: bool | None = None
 
 
 class MLModel(Model):
@@ -44,13 +36,13 @@ class MLModel(Model):
 
 
 class MLModelUpdate(BaseModel):
-    timestamp: Union[int, None] = None
-    accuracy: Union[float, None] = None
+    timestamp: int | None = None
+    accuracy: float | None = None
 
 
 class GeoJSON(BaseModel):
-    type: Union[str, None] = 'Point'
-    coordinates: Union[tuple[float, float], None]
+    type: str = 'Point'
+    coordinates: tuple[float, float] | None = None
 
 
 class Instruction(Model):
@@ -59,13 +51,10 @@ class Instruction(Model):
     lat: float
     lon: float
     geo_json: GeoJSON
-    provincia: Union[str, None]
-    departamento: Union[str, None]
-    municipio: Union[str, None]
 
 
 class InstructionSearch(BaseModel):
-    material_name: Union[str, None] = None
+    material_name: str | None = None
     lat: float
     lon: float
     max_distance: float
@@ -79,46 +68,23 @@ class InstructionCreate(BaseModel):
 
 
 class InstructionUpdate(BaseModel):
-    material_name: Union[str, None]
-    editable: Union[bool, None]
-
-
-class GeorefLugar(BaseModel):
-    id: Union[str, None]
-    nombre: Union[str, None]
-
-
-class GeorefParametros(BaseModel):
-    lat: float
-    lon: float
-
-
-class GeorefUbicacion(BaseModel):
-    provincia: Union[GeorefLugar, None]
-    departamento: Union[GeorefLugar, None]
-    municipio: Union[GeorefLugar, None]
-    lat: float
-    lon: float
-
-
-class GeorefLocation(BaseModel):
-    parametros: GeorefParametros
-    ubicacion: GeorefUbicacion
+    material_name: str | None = None
+    editable: bool | None = None
 
 
 class Image(Model):
     filename: str
     material_name: str
     downloaded: bool = False
-    tags: Union[list[str], None] = None
+    tags: list[str] = []
 
 
 class ImageSearch(BaseModel):
-    filename: Union[str, None] = None
-    material_name: Union[str, None] = None
-    downloaded: Union[bool, None] = None
-    tags: Union[list[str], None] = Field(Query(default=None))
+    filename: str | None = None
+    material_name: str | None = None
+    downloaded: bool | None = None
+    tags: list[str] | None = Field(Query(default=None))
 
 
 class ImageUpdate(BaseModel):
-    downloaded: Union[bool, None] = None
+    downloaded: bool | None = None

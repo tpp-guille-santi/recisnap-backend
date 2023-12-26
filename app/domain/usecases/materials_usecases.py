@@ -1,5 +1,4 @@
 import logging
-from typing import Union
 
 from odmantic import AIOEngine
 from odmantic import ObjectId
@@ -20,7 +19,7 @@ class MaterialsUseCases:
         await self.engine.save(material)
         return material
 
-    async def list_materials(self, enabled: Union[bool, None]) -> list[Material]:
+    async def list_materials(self, enabled: bool | None) -> list[Material]:
         query_filters = []
         if enabled is not None:
             query_filters.append(Material.enabled == enabled)

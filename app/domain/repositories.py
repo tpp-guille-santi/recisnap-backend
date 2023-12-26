@@ -3,8 +3,6 @@ from abc import abstractmethod
 
 from deta.drive import DriveStreamingBody
 
-from app.domain.entities import GeorefLocation
-
 
 class AbstractFirebaseAuthRepository(ABC):
     @abstractmethod
@@ -25,10 +23,4 @@ class AbstractDetaDriveRepository(ABC):
 
     @abstractmethod
     async def download_file(self, filename: str) -> DriveStreamingBody:
-        raise NotImplementedError
-
-
-class AbstractGeorefRepository(ABC):
-    @abstractmethod
-    async def get_georef_location(self, latitude: float, longitude: float) -> GeorefLocation:
         raise NotImplementedError
