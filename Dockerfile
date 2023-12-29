@@ -9,6 +9,3 @@ COPY --from=requirements-stage /tmp/requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY ./app /app
 COPY ./local_dev.sh /local_dev.sh
-
-EXPOSE 8000
-CMD ["bash", "local_dev.sh"]

@@ -7,9 +7,9 @@ from pydantic import Field
 
 class User(Model):
     firebase_uid: str
-    permissions: list[str] = []
     name: str
     email: EmailStr
+    permissions: list[str] = []
 
 
 class UserUpdate(BaseModel):

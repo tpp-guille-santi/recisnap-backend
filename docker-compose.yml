@@ -1,14 +1,12 @@
-version: "3.11"
 services:
-  webhook:
+  web:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        requirements: requirements.txt
     env_file:
       - .env
     volumes:
     - .:/app
     ports:
       - "8000:8000"
+    command: sh local_dev.sh
