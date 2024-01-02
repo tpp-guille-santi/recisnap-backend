@@ -8,8 +8,12 @@ from app.domain.entities import Instruction
 from app.domain.entities import InstructionCreate
 from app.domain.entities import InstructionSearch
 from app.domain.entities import InstructionUpdate
+from app.domain.entities import Pagination
 from app.domain.errors import InstructionNotFoundException
+from app.domain.errors import PageNotFoundException
 from app.domain.repositories import AbstractDetaDriveRepository
+from app.domain.utils import get_next_page
+from app.domain.utils import get_total_pages
 
 LOGGER = logging.getLogger(__name__)
 
@@ -34,8 +38,20 @@ class InstructionsUseCases:
         )
         return await self.engine.save(instruction)
 
-    async def list_instructions(self) -> list[Instruction]:
-        return await self.engine.find(Instruction)
+    async def list_instructions(self, page: int, page_size: int) -> Pagination:
+        count = await self.engine.count(Instruction)
+        total_pages = get_total_pages(count, page_size)
+        if page >= total_pages:
+            raise PageNotFoundException()
+        entities = await self.engine.find(
+            Instruction,
+            skip=page * page_size,
+            limit=page_size,
+        )
+        next_page = get_next_page(page, total_pages)
+        return Pagination(
+            count=count, next_page=next_page, page=page, page_size=page_size, entities=entities
+        )
 
     async def search_instructions(self, search: InstructionSearch) -> list[Instruction]:
         # This is the ideal code, but as it doesn't work, we are using a workaround

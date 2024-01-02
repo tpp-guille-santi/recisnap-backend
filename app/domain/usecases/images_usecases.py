@@ -8,8 +8,11 @@ from odmantic.query import QueryExpression
 from app.domain.entities import Image
 from app.domain.entities import ImageSearch
 from app.domain.entities import ImageUpdate
+from app.domain.entities import Pagination
 from app.domain.errors import ImageNotFoundException
 from app.domain.repositories import AbstractDetaDriveRepository
+from app.domain.utils import get_next_page
+from app.domain.utils import get_total_pages
 
 LOGGER = logging.getLogger(__name__)
 
@@ -42,10 +45,24 @@ class ImagesUseCases:
         image = await self.engine.save(image)
         return image
 
-    async def list_images(self, params: ImageSearch | None) -> list[Image]:
+    async def list_images(
+        self, page: int, page_size: int, params: ImageSearch | None
+    ) -> Pagination:
         query_filters = _get_search_params(params)
-        images = await self.engine.find(Image, *query_filters)
-        return images
+        count = await self.engine.count(Image, *query_filters)
+        total_pages = get_total_pages(count, page_size)
+        if page >= total_pages:
+            page = 0
+        entities = await self.engine.find(
+            Image,
+            *query_filters,
+            skip=page * page_size,
+            limit=page_size,
+        )
+        next_page = get_next_page(page, total_pages)
+        return Pagination(
+            count=count, next_page=next_page, page=page, page_size=page_size, entities=entities
+        )
 
     async def get_image_by_id(self, id: ObjectId) -> Image:
         image = await self.engine.find_one(Image, Image.id == id)

@@ -7,6 +7,7 @@ from odmantic import ObjectId
 
 from app.domain.entities import Material
 from app.domain.entities import MaterialUpdate
+from app.domain.entities import Pagination
 from app.domain.usecases.materials_usecases import MaterialsUseCases
 from app.infrastructure.dependencies import materials_usecases_dependency
 
@@ -35,12 +36,16 @@ async def get_latest_material(
     return material
 
 
-@router.get('/', response_model=list[Material])
+@router.get('/', response_model=Pagination)
 async def list_materials(
+    page: int = 0,
+    page_size: int = 10,
     enabled: bool | None = None,
     materials_usecases: MaterialsUseCases = Depends(materials_usecases_dependency),
 ):
-    materials = await materials_usecases.list_materials(enabled)
+    materials = await materials_usecases.list_materials(
+        page=page, page_size=page_size, enabled=enabled
+    )
     return materials
 
 

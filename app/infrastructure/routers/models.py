@@ -7,6 +7,7 @@ from odmantic import ObjectId
 
 from app.domain.entities import MLModel
 from app.domain.entities import MLModelUpdate
+from app.domain.entities import Pagination
 from app.domain.usecases.models_usecases import ModelsUseCases
 from app.infrastructure.dependencies import models_usecases_dependency
 
@@ -35,11 +36,13 @@ async def get_latest_model(
     return model
 
 
-@router.get('/', response_model=list[MLModel])
+@router.get('/', response_model=Pagination)
 async def list_models(
+    page: int = 0,
+    page_size: int = 10,
     models_usecases: ModelsUseCases = Depends(models_usecases_dependency),
 ):
-    models = await models_usecases.list_models()
+    models = await models_usecases.list_models(page=page, page_size=page_size)
     return models
 
 

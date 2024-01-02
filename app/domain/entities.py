@@ -12,6 +12,14 @@ class User(Model):
     permissions: list[str] = []
 
 
+class Pagination(BaseModel):
+    count: int
+    next_page: int | None
+    page: int
+    page_size: int
+    entities: list
+
+
 class UserUpdate(BaseModel):
     permissions: list[str] | None = None
     name: str | None = None

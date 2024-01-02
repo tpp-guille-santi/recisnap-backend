@@ -1,7 +1,9 @@
 import pytest
 from odmantic import ObjectId
 
+from app.domain.entities import Pagination
 from app.domain.entities import User
+from app.domain.errors import PageNotFoundException
 from tests.conftest import async_return
 
 
@@ -96,20 +98,53 @@ class TestListUsers:
         client,
         users_usecases_mock,
     ):
-        users = [
-            User(
-                firebase_uid='1234',
-                name='Test',
-                email='test@example.com',
-                id=ObjectId('658f108412688c770b84b14a'),
-            )
-        ]
-        users_usecases_mock.list_users.return_value = async_return(users)
+        entities = Pagination(
+            count=1,
+            next_page=None,
+            page=0,
+            page_size=1,
+            entities=[
+                User(
+                    firebase_uid='1234',
+                    name='Test',
+                    email='test@example.com',
+                    id=ObjectId('658f108412688c770b84b14a'),
+                )
+            ],
+        )
+        pagination = Pagination(count=1, next_page=None, page=0, page_size=10, entities=entities)
+
+        users_usecases_mock.list_users.return_value = async_return(pagination)
+        response = client.get('/users/', params={'page': 0, 'page_size': 10})
+
+        assert response.json() == pagination.model_dump(mode='json')
+        assert response.status_code == 200
+        users_usecases_mock.list_users.assert_called_once()
+
+    async def test_list_users_no_pages(
+        self,
+        client,
+        users_usecases_mock,
+    ):
+        pagination = Pagination(count=1, next_page=None, page=0, page_size=10, entities=[])
+
+        users_usecases_mock.list_users.return_value = async_return(pagination)
+        response = client.get('/users/', params={'page': 0, 'page_size': 10})
+
+        assert response.json() == pagination.model_dump(mode='json')
+        assert response.status_code == 200
+        users_usecases_mock.list_users.assert_called_once()
+
+    async def test_list_users_wrong_page(
+        self,
+        client,
+        users_usecases_mock,
+    ):
+        users_usecases_mock.list_users.side_effect = PageNotFoundException
 
         response = client.get('/users/')
 
-        assert response.json() == [user.model_dump(mode='json') for user in users]
-        assert response.status_code == 200
+        assert response.status_code == 404
         users_usecases_mock.list_users.assert_called_once()
 
 
