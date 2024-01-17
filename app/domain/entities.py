@@ -1,8 +1,13 @@
+from typing import Generic
+from typing import TypeVar
+
 from fastapi import Query
 from odmantic import Model
 from pydantic import BaseModel
 from pydantic import EmailStr
 from pydantic import Field
+
+T = TypeVar('T')
 
 
 class User(Model):
@@ -12,12 +17,12 @@ class User(Model):
     permissions: list[str] = []
 
 
-class Pagination(BaseModel):
+class Pagination(BaseModel, Generic[T]):
     count: int
     next_page: int | None
     page: int
     page_size: int
-    entities: list
+    items: list[T]
 
 
 class UserUpdate(BaseModel):

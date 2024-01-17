@@ -43,14 +43,14 @@ class InstructionsUseCases:
         total_pages = get_total_pages(count, page_size)
         if page >= total_pages:
             raise PageNotFoundException()
-        entities = await self.engine.find(
+        items = await self.engine.find(
             Instruction,
             skip=page * page_size,
             limit=page_size,
         )
         next_page = get_next_page(page, total_pages)
-        return Pagination(
-            count=count, next_page=next_page, page=page, page_size=page_size, entities=entities
+        return Pagination[Instruction](
+            count=count, next_page=next_page, page=page, page_size=page_size, items=items
         )
 
     async def search_instructions(self, search: InstructionSearch) -> list[Instruction]:

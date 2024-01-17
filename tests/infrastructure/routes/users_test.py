@@ -98,21 +98,15 @@ class TestListUsers:
         client,
         users_usecases_mock,
     ):
-        entities = Pagination(
-            count=1,
-            next_page=None,
-            page=0,
-            page_size=1,
-            entities=[
-                User(
-                    firebase_uid='1234',
-                    name='Test',
-                    email='test@example.com',
-                    id=ObjectId('658f108412688c770b84b14a'),
-                )
-            ],
-        )
-        pagination = Pagination(count=1, next_page=None, page=0, page_size=10, entities=entities)
+        items = [
+            User(
+                firebase_uid='1234',
+                name='Test',
+                email='test@example.com',
+                id=ObjectId('658f108412688c770b84b14a'),
+            )
+        ]
+        pagination = Pagination[User](count=1, next_page=None, page=0, page_size=10, items=items)
 
         users_usecases_mock.list_users.return_value = async_return(pagination)
         response = client.get('/users/', params={'page': 0, 'page_size': 10})
@@ -126,7 +120,7 @@ class TestListUsers:
         client,
         users_usecases_mock,
     ):
-        pagination = Pagination(count=1, next_page=None, page=0, page_size=10, entities=[])
+        pagination = Pagination[User](count=1, next_page=None, page=0, page_size=10, items=[])
 
         users_usecases_mock.list_users.return_value = async_return(pagination)
         response = client.get('/users/', params={'page': 0, 'page_size': 10})

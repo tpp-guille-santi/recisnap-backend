@@ -53,15 +53,15 @@ class ImagesUseCases:
         total_pages = get_total_pages(count, page_size)
         if page >= total_pages:
             page = 0
-        entities = await self.engine.find(
+        items = await self.engine.find(
             Image,
             *query_filters,
             skip=page * page_size,
             limit=page_size,
         )
         next_page = get_next_page(page, total_pages)
-        return Pagination(
-            count=count, next_page=next_page, page=page, page_size=page_size, entities=entities
+        return Pagination[Image](
+            count=count, next_page=next_page, page=page, page_size=page_size, items=items
         )
 
     async def get_image_by_id(self, id: ObjectId) -> Image:
