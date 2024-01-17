@@ -6,7 +6,11 @@ from odmantic import query
 
 from app.domain.entities import MLModel
 from app.domain.entities import MLModelUpdate
+from app.domain.entities import Pagination
 from app.domain.errors import ModelNotFoundException
+from app.domain.errors import PageNotFoundException
+from app.domain.utils import get_next_page
+from app.domain.utils import get_total_pages
 
 LOGGER = logging.getLogger(__name__)
 
@@ -22,8 +26,21 @@ class ModelsUseCases:
         model = await self.engine.save(model)
         return model
 
-    async def list_models(self) -> list[MLModel]:
-        return await self.engine.find(MLModel, sort=query.desc(MLModel.timestamp))
+    async def list_models(self, page: int, page_size: int) -> Pagination:
+        count = await self.engine.count(MLModel)
+        total_pages = get_total_pages(count, page_size)
+        if page >= total_pages:
+            raise PageNotFoundException()
+        items = await self.engine.find(
+            MLModel,
+            skip=page * page_size,
+            limit=page_size,
+            sort=query.desc(MLModel.timestamp),
+        )
+        next_page = get_next_page(page, total_pages)
+        return Pagination[MLModel](
+            count=count, next_page=next_page, page=page, page_size=page_size, items=items
+        )
 
     async def get_model_by_id(self, id: ObjectId) -> MLModel:
         model = await self.engine.find_one(MLModel, MLModel.id == id)

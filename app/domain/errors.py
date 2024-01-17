@@ -3,6 +3,12 @@ from fastapi import status
 from odmantic import ObjectId
 
 
+class PageNotFoundException(HTTPException):
+    def __init__(self):
+        self.status_code = status.HTTP_404_NOT_FOUND
+        self.detail = 'Page not found'
+
+
 class UserNotFoundException(HTTPException):
     def __init__(self, id: str):
         self.status_code = status.HTTP_404_NOT_FOUND

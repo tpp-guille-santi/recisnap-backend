@@ -1,5 +1,4 @@
 import logging
-from typing import Union
 
 from odmantic import AIOEngine
 from odmantic import ObjectId
@@ -7,7 +6,11 @@ from odmantic import query
 
 from app.domain.entities import Material
 from app.domain.entities import MaterialUpdate
+from app.domain.entities import Pagination
 from app.domain.errors import MaterialNotFoundException
+from app.domain.errors import PageNotFoundException
+from app.domain.utils import get_next_page
+from app.domain.utils import get_total_pages
 
 LOGGER = logging.getLogger(__name__)
 
@@ -20,11 +23,25 @@ class MaterialsUseCases:
         await self.engine.save(material)
         return material
 
-    async def list_materials(self, enabled: Union[bool, None]) -> list[Material]:
+    async def list_materials(self, page: int, page_size: int, enabled: bool | None) -> Pagination:
         query_filters = []
         if enabled is not None:
             query_filters.append(Material.enabled == enabled)
-        return await self.engine.find(Material, *query_filters, sort=Material.order)
+        count = await self.engine.count(Material, *query_filters)
+        total_pages = get_total_pages(count, page_size)
+        if page >= total_pages:
+            raise PageNotFoundException()
+        items = await self.engine.find(
+            Material,
+            *query_filters,
+            skip=page * page_size,
+            limit=page_size,
+            sort=Material.order,
+        )
+        next_page = get_next_page(page, total_pages)
+        return Pagination[Material](
+            count=count, next_page=next_page, page=page, page_size=page_size, items=items
+        )
 
     async def get_material_by_id(self, id: ObjectId) -> Material:
         material = await self.engine.find_one(Material, Material.id == id)

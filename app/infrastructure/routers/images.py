@@ -11,6 +11,7 @@ from odmantic import ObjectId
 from app.domain.entities import Image
 from app.domain.entities import ImageSearch
 from app.domain.entities import ImageUpdate
+from app.domain.entities import Pagination
 from app.domain.usecases.images_usecases import ImagesUseCases
 from app.infrastructure.dependencies import images_usecases_dependency
 from app.infrastructure.schemas import ImagesCountResponse
@@ -32,12 +33,14 @@ async def create_image(
     return image
 
 
-@router.get('/', response_model=list[Image])
+@router.get('/', response_model=Pagination)
 async def list_images(
     params: ImageSearch = Depends(),
+    page: int = 0,
+    page_size: int = 10,
     images_usecases: ImagesUseCases = Depends(images_usecases_dependency),
 ):
-    images = await images_usecases.list_images(params)
+    images = await images_usecases.list_images(page=page, page_size=page_size, params=params)
     return images
 
 

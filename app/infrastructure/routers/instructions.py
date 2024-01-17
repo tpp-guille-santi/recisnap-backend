@@ -12,6 +12,7 @@ from app.domain.entities import Instruction
 from app.domain.entities import InstructionCreate
 from app.domain.entities import InstructionSearch
 from app.domain.entities import InstructionUpdate
+from app.domain.entities import Pagination
 from app.domain.usecases.instructions_usecases import InstructionsUseCases
 from app.infrastructure.dependencies import instructions_usecases_dependency
 
@@ -32,11 +33,13 @@ async def create_instruction(
     return instruction
 
 
-@router.get('/', response_model=list[Instruction])
+@router.get('/', response_model=Pagination)
 async def list_instructions(
+    page: int = 0,
+    page_size: int = 10,
     instructions_usecases: InstructionsUseCases = Depends(instructions_usecases_dependency),
 ):
-    instructions = await instructions_usecases.list_instructions()
+    instructions = await instructions_usecases.list_instructions(page=page, page_size=page_size)
     return instructions
 
 

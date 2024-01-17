@@ -2,9 +2,13 @@ import logging
 
 from odmantic import AIOEngine
 
+from app.domain.entities import Pagination
 from app.domain.entities import User
 from app.domain.entities import UserUpdate
+from app.domain.errors import PageNotFoundException
 from app.domain.errors import UserNotFoundException
+from app.domain.utils import get_next_page
+from app.domain.utils import get_total_pages
 from app.infrastructure.repositories import FirebaseAuthRepository
 
 LOGGER = logging.getLogger(__name__)
@@ -19,9 +23,20 @@ class UsersUseCases:
         user = await self.engine.save(user)
         return user
 
-    async def list_users(self) -> list[User]:
-        users = await self.engine.find(User)
-        return users
+    async def list_users(self, page: int, page_size: int) -> Pagination:
+        count = await self.engine.count(User)
+        total_pages = get_total_pages(count, page_size)
+        if page >= total_pages:
+            raise PageNotFoundException()
+        items = await self.engine.find(
+            User,
+            skip=page * page_size,
+            limit=page_size,
+        )
+        next_page = get_next_page(page, total_pages)
+        return Pagination[User](
+            count=count, next_page=next_page, page=page, page_size=page_size, items=items
+        )
 
     async def get_user_by_firebase_uid(self, firebase_uid: str) -> User:
         user = await self.engine.find_one(User, User.firebase_uid == firebase_uid)

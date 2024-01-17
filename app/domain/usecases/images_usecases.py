@@ -1,5 +1,4 @@
 import logging
-from typing import Union
 
 from odmantic import AIOEngine
 from odmantic import ObjectId
@@ -9,13 +8,16 @@ from odmantic.query import QueryExpression
 from app.domain.entities import Image
 from app.domain.entities import ImageSearch
 from app.domain.entities import ImageUpdate
+from app.domain.entities import Pagination
 from app.domain.errors import ImageNotFoundException
 from app.domain.repositories import AbstractDetaDriveRepository
+from app.domain.utils import get_next_page
+from app.domain.utils import get_total_pages
 
 LOGGER = logging.getLogger(__name__)
 
 
-def _get_search_params(params: Union[ImageSearch, None]) -> list[QueryExpression]:
+def _get_search_params(params: ImageSearch | None) -> list[QueryExpression]:
     query_filters = []
     if params is not None:
         if params.filename is not None:
@@ -43,10 +45,24 @@ class ImagesUseCases:
         image = await self.engine.save(image)
         return image
 
-    async def list_images(self, params: Union[ImageSearch, None]) -> list[Image]:
+    async def list_images(
+        self, page: int, page_size: int, params: ImageSearch | None
+    ) -> Pagination:
         query_filters = _get_search_params(params)
-        images = await self.engine.find(Image, *query_filters)
-        return images
+        count = await self.engine.count(Image, *query_filters)
+        total_pages = get_total_pages(count, page_size)
+        if page >= total_pages:
+            page = 0
+        items = await self.engine.find(
+            Image,
+            *query_filters,
+            skip=page * page_size,
+            limit=page_size,
+        )
+        next_page = get_next_page(page, total_pages)
+        return Pagination[Image](
+            count=count, next_page=next_page, page=page, page_size=page_size, items=items
+        )
 
     async def get_image_by_id(self, id: ObjectId) -> Image:
         image = await self.engine.find_one(Image, Image.id == id)
@@ -76,7 +92,7 @@ class ImagesUseCases:
         file = await self.deta_drive_repository.download_file(filename)
         return file.iter_chunks()
 
-    async def get_images_count(self, params: Union[ImageSearch, None]) -> int:
+    async def get_images_count(self, params: ImageSearch | None) -> int:
         query_filters = _get_search_params(params)
         count = await self.engine.count(Image, *query_filters)
         return count

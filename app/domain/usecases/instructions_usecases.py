@@ -8,9 +8,12 @@ from app.domain.entities import Instruction
 from app.domain.entities import InstructionCreate
 from app.domain.entities import InstructionSearch
 from app.domain.entities import InstructionUpdate
+from app.domain.entities import Pagination
 from app.domain.errors import InstructionNotFoundException
+from app.domain.errors import PageNotFoundException
 from app.domain.repositories import AbstractDetaDriveRepository
-from app.infrastructure.repositories import GeorefRepository
+from app.domain.utils import get_next_page
+from app.domain.utils import get_total_pages
 
 LOGGER = logging.getLogger(__name__)
 
@@ -19,19 +22,12 @@ class InstructionsUseCases:
     def __init__(
         self,
         engine: AIOEngine,
-        georef_repository: GeorefRepository,
         deta_drive_repository: AbstractDetaDriveRepository,
     ):
         self.engine = engine
-        self.georef_repository = georef_repository
         self.deta_drive_repository = deta_drive_repository
 
     async def create_instruction(self, create: InstructionCreate) -> Instruction:
-        georef_location = await self.georef_repository.get_georef_location(create.lat, create.lon)
-        ubicacion = georef_location.ubicacion
-        provincia = ubicacion.provincia.nombre if ubicacion.provincia else None
-        departamento = ubicacion.departamento.nombre if ubicacion.departamento else None
-        municipio = ubicacion.municipio.nombre if ubicacion.municipio else None
         geo_json = GeoJSON(coordinates=(create.lon, create.lat))
         instruction = Instruction(
             material_name=create.material_name,
@@ -39,14 +35,23 @@ class InstructionsUseCases:
             lat=create.lat,
             lon=create.lon,
             geo_json=geo_json,
-            municipio=municipio,
-            provincia=provincia,
-            departamento=departamento,
         )
         return await self.engine.save(instruction)
 
-    async def list_instructions(self) -> list[Instruction]:
-        return await self.engine.find(Instruction)
+    async def list_instructions(self, page: int, page_size: int) -> Pagination:
+        count = await self.engine.count(Instruction)
+        total_pages = get_total_pages(count, page_size)
+        if page >= total_pages:
+            raise PageNotFoundException()
+        items = await self.engine.find(
+            Instruction,
+            skip=page * page_size,
+            limit=page_size,
+        )
+        next_page = get_next_page(page, total_pages)
+        return Pagination[Instruction](
+            count=count, next_page=next_page, page=page, page_size=page_size, items=items
+        )
 
     async def search_instructions(self, search: InstructionSearch) -> list[Instruction]:
         # This is the ideal code, but as it doesn't work, we are using a workaround

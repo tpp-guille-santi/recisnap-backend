@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import status
 
+from app.domain.entities import Pagination
 from app.domain.entities import User
 from app.domain.entities import UserUpdate
 from app.domain.usecases.users_usecases import UsersUseCases
@@ -25,9 +26,13 @@ async def create_user(
     return user
 
 
-@router.get('/', response_model=list[User])
-async def list_users(users_usecases: UsersUseCases = Depends(users_usecases_dependency)):
-    users = await users_usecases.list_users()
+@router.get('/', response_model=Pagination)
+async def list_users(
+    page: int = 0,
+    page_size: int = 10,
+    users_usecases: UsersUseCases = Depends(users_usecases_dependency),
+):
+    users = await users_usecases.list_users(page=page, page_size=page_size)
     return users
 
 

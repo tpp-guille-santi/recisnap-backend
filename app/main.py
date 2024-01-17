@@ -1,6 +1,7 @@
 import json
 import logging
 import uuid
+from contextlib import asynccontextmanager
 
 import firebase_admin
 from fastapi import FastAPI
@@ -20,19 +21,21 @@ from app.infrastructure.settings import settings
 
 LOGGER = logging.getLogger(__name__)
 
-cred = credentials.Certificate({**json.loads(settings.FIREBASE_CREDENTIALS)})
-firebase_admin.initialize_app(cred)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    configure_logging(settings.LOG_LEVEL)
+    cred = credentials.Certificate({**json.loads(settings.FIREBASE_CREDENTIALS)})
+    firebase_admin.initialize_app(cred)
+    yield
+
 
 app = FastAPI(
     title='Image Predictor Service',
     version='1.0',
     description='API to predict the material from an image.',
+    lifespan=lifespan,
 )
-
-
-@app.on_event('startup')
-async def startup_event():
-    configure_logging(settings.LOG_LEVEL)
 
 
 @app.middleware('http')
